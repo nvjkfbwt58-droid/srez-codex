@@ -1,0 +1,11 @@
+import 'dotenv/config';
+import {resolve} from 'node:path';
+import {createApp} from './app';
+import {Store} from './store';
+import {OpenAIProviders} from './providers';
+const models={image:process.env.IMAGE_MODEL||'gpt-image-2.5-sunburst',analysis:process.env.BRAND_ANALYSIS_MODEL||'gpt-4.1'};
+const providers=process.env.OPENAI_API_KEY&&process.env.IMAGE_PROVIDER!=='none'?new OpenAIProviders(process.env.OPENAI_API_KEY,models.image,models.analysis):undefined;
+const store=new Store(process.env.DATA_DIR||'./storage');
+const app=createApp({store,analysis:providers,images:providers,models,maxJobs:Number(process.env.MAX_JOBS_PER_DAY||20),concurrent:Number(process.env.MAX_CONCURRENT_JOBS||2),publicDir:resolve(process.env.NODE_ENV==='production'?'dist':'public')});
+if(process.env.NODE_ENV==='production')app.get('/{*path}',(_req,res)=>res.sendFile(resolve('dist/index.html')));
+app.listen(Number(process.env.PORT||4178),'127.0.0.1',()=>console.log(`Срез API http://127.0.0.1:${process.env.PORT||4178} · ${providers?'провайдер настроен':'библиотека примеров'}`));

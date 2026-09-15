@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-pages/
+dist-server/
+.env
+.env.*
+!.env.example
+.DS_Store
+playwright-report/
+storage/
+test-results/
+.sites-runtime/

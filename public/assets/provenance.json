@@ -1,0 +1,56 @@
+{
+  "created": "2026-09-15",
+  "provenance": "Original AI-generated development examples produced with the built-in ImageGen tool. Separate from the app live image API.",
+  "assets": [
+    {
+      "name": "kvartal-right.png",
+      "prompt": "Use case: product-mockup.\nAsset type: original photographic bitmap background for an app coupon preview, portrait orientation 1024x1536.\nStyle/medium: premium photorealistic studio product photography with realistic materials, refined art direction, crisp yet natural details.\nComposition/framing: design the full uncropped portrait canvas. Keep the entire top 55 percent clear of objects, and keep the left 55 percent mostly open backdrop throughout, for native app typography added later. Cluster all main physical subjects in the lower-right corner. A photographed set with no border.\nConstraints: absolutely no letters, words, numerals, typography, brand marks, logos, label designs, pricing, coupons, UI, frames, watermarks, stickers, barcodes or promotional badges. Any packaging must be wholly blank and unbranded. This image contains only products and the physical studio backdrop.\nPrimary request: vibrant vermilion orange wall with fine tactile material texture and terracotta stone ledge in the bottom portion, a large unbranded blank orange foil potato chips bag at the lower right, black ceramic bowl filled with ridged potato crisps just below and slightly left of the bag, and a few loose crisps nearby. The bag is orange on orange with convincing glossy folds and sealed edges. Directional studio sunlight casts strong elegant shadows. Palette: vermilion orange, terracotta, black ceramic, golden crisps. Product cluster should remain wholly below midpoint; bag mostly in rightmost 40 percent.",
+      "source": "/Users/daniilkuzmin/.codex/generated_images/01a0a467-f301-7f01-8162-abd2feeaeb4d/exec-41c86f7e-d40f-4a8a-a777-24d7daf0c7cf.png",
+      "destination": "/Users/daniilkuzmin/.codex/.chatgpt-projects/g-p-6aa8fd6edb9081919094c8d3d4654c80/srez-codex/public/assets/kvartal-right.png",
+      "tool": "built-in image_gen.imagegen",
+      "size": "1024x1536",
+      "type": "development example",
+      "inspection": "Visually inspected: photorealistic, blank packaging, no text/logos/UI, large open upper and left background. Subjects cluster lower-right."
+    },
+    {
+      "name": "kvartal-air.png",
+      "prompt": "Use case: product-mockup.\nAsset type: original photographic bitmap background for an app coupon preview, portrait orientation 1024x1536.\nStyle/medium: premium photorealistic studio product photography with realistic materials, refined art direction, crisp yet natural details.\nComposition/framing: design the full uncropped portrait canvas. Keep the entire top 55 percent clear of objects, and keep the left 55 percent mostly open backdrop throughout, for native app typography added later. Cluster all main physical subjects in the lower-right corner. A photographed set with no border.\nConstraints: absolutely no letters, words, numerals, typography, brand marks, logos, label designs, pricing, coupons, UI, frames, watermarks, stickers, barcodes or promotional badges. Any packaging must be wholly blank and unbranded. This image contains only products and the physical studio backdrop.\nPrimary request: airy bright studio still life of several floating golden ridged potato crisps only at the bottom and right edge of the portrait frame, with a pale orange spacious seamless backdrop. No bag, no bowl. Same vibrant orange family as a vermilion snack identity, but noticeably lighter and airier. Arrange crisps in a graceful rising curve in the bottom-right quadrant only, some gently suspended, with a few subtle hard light shadows near the bottom edge. Restrained composition and generous clean pale orange negative space above and left.",
+      "source": "/Users/daniilkuzmin/.codex/generated_images/01a0a467-f301-7f01-8162-abd2feeaeb4d/exec-66b67fe2-2dcc-4920-940f-98d3f2be9d00.png",
+      "destination": "/Users/daniilkuzmin/.codex/.chatgpt-projects/g-p-6aa8fd6edb9081919094c8d3d4654c80/srez-codex/public/assets/kvartal-air.png",
+      "tool": "built-in image_gen.imagegen",
+      "size": "1024x1536",
+      "type": "development example",
+      "inspection": "Visually inspected: photorealistic, blank packaging, no text/logos/UI, large open upper and left background. Subjects cluster lower-right."
+    },
+    {
+      "name": "kvartal-scene.png",
+      "prompt": "Use case: product-mockup.\nAsset type: original photographic bitmap background for an app coupon preview, portrait orientation 1024x1536.\nStyle/medium: premium photorealistic studio product photography with realistic materials, refined art direction, crisp yet natural details.\nComposition/framing: design the full uncropped portrait canvas. Keep the entire top 55 percent clear of objects, and keep the left 55 percent mostly open backdrop throughout, for native app typography added later. Cluster all main physical subjects in the lower-right corner. A photographed set with no border.\nConstraints: absolutely no letters, words, numerals, typography, brand marks, logos, label designs, pricing, coupons, UI, frames, watermarks, stickers, barcodes or promotional badges. Any packaging must be wholly blank and unbranded. This image contains only products and the physical studio backdrop.\nPrimary request: artful orange and terracotta studio still life, a generous black ceramic bowl piled with ridged potato crisps on a low terracotta geometric stone pedestal at the bottom right. No bag or packaging. A few loose golden crisps on the pedestal. High contrast hard sunlight, dramatic precise shadows, sculptural composition with orange plaster textured backdrop. The bowl, pedestal and crisps belong in the bottom-right portion, leaving a broad empty orange upper half and left side.",
+      "source": "/Users/daniilkuzmin/.codex/generated_images/01a0a467-f301-7f01-8162-abd2feeaeb4d/exec-28ad9e0f-119e-42dd-9ce5-d5dde91fc780.png",
+      "destination": "/Users/daniilkuzmin/.codex/.chatgpt-projects/g-p-6aa8fd6edb9081919094c8d3d4654c80/srez-codex/public/assets/kvartal-scene.png",
+      "tool": "built-in image_gen.imagegen",
+      "size": "1024x1536",
+      "type": "development example",
+      "inspection": "Visually inspected: photorealistic, blank packaging, no text/logos/UI, large open upper and left background. Subjects cluster lower-right."
+    },
+    {
+      "name": "copper.png",
+      "prompt": "Use case: product-mockup.\nAsset type: original photographic bitmap background for an app coupon preview, portrait orientation 1024x1536.\nStyle/medium: premium photorealistic studio product photography with realistic materials, refined art direction, crisp yet natural details.\nComposition/framing: design the full uncropped portrait canvas. Keep the entire top 55 percent clear of objects, and keep the left 55 percent mostly open backdrop throughout, for native app typography added later. Cluster all main physical subjects in the lower-right corner. A photographed set with no border.\nConstraints: absolutely no letters, words, numerals, typography, brand marks, logos, label designs, pricing, coupons, UI, frames, watermarks, stickers, barcodes or promotional badges. Any packaging must be wholly blank and unbranded. This image contains only products and the physical studio backdrop.\nPrimary request: sophisticated premium studio photograph with a deep forest green background, elegant shallow brass bowl filled with mixed roasted nuts at the lower right on a dark green marble ledge. Warm realistic almond, walnut, cashew and hazelnut texture, softly gleaming brass. A subtle tasteful fine gold line pattern decorates only the rightmost and bottom backdrop edges, away from the blank top and left. Premium directional warm lighting, rich controlled shadows, dark green, gold and natural nut tones. All physical subjects clustered in lower-right corner.",
+      "source": "/Users/daniilkuzmin/.codex/generated_images/01a0a467-f301-7f01-8162-abd2feeaeb4d/exec-ee7280cb-a7c4-44f1-81a3-cb6c02105009.png",
+      "destination": "/Users/daniilkuzmin/.codex/.chatgpt-projects/g-p-6aa8fd6edb9081919094c8d3d4654c80/srez-codex/public/assets/copper.png",
+      "tool": "built-in image_gen.imagegen",
+      "size": "1024x1536",
+      "type": "development example",
+      "inspection": "Visually inspected: photorealistic, blank packaging, no text/logos/UI, large open upper and left background. Subjects cluster lower-right."
+    },
+    {
+      "name": "lemon.png",
+      "prompt": "Use case: product-mockup.\nAsset type: original photographic bitmap background for an app coupon preview, portrait orientation 1024x1536.\nStyle/medium: premium photorealistic studio product photography with realistic materials, refined art direction, crisp yet natural details.\nComposition/framing: design the full uncropped portrait canvas. Keep the entire top 55 percent clear of objects, and keep the left 55 percent mostly open backdrop throughout, for native app typography added later. Cluster all main physical subjects in the lower-right corner. A photographed set with no border.\nConstraints: absolutely no letters, words, numerals, typography, brand marks, logos, label designs, pricing, coupons, UI, frames, watermarks, stickers, barcodes or promotional badges. Any packaging must be wholly blank and unbranded. This image contains only products and the physical studio backdrop.\nPrimary request: playful bold product photograph against a vivid saturated lemon yellow seamless backdrop. A matte white wholly unbranded blank can of sparkling lemonade is grouped with two fresh lemons and one sliced lemon at the bottom right. A few authentic condensation droplets on the white can, natural citrus pores, fresh glistening cut flesh. Strong directional studio light casts a bold almost black shadow to the right and along the bottom, leaving top and left completely clear of products and shadows. Energetic yellow and white composition with premium photographic realism. Keep the can within the rightmost 40 percent and below the midpoint.",
+      "source": "/Users/daniilkuzmin/.codex/generated_images/01a0a467-f301-7f01-8162-abd2feeaeb4d/exec-2cdebfb5-4736-4d5f-86aa-7841e72363c5.png",
+      "destination": "/Users/daniilkuzmin/.codex/.chatgpt-projects/g-p-6aa8fd6edb9081919094c8d3d4654c80/srez-codex/public/assets/lemon.png",
+      "tool": "built-in image_gen.imagegen",
+      "size": "1024x1536",
+      "type": "development example",
+      "inspection": "Visually inspected: photorealistic, blank packaging, no text/logos/UI, large open upper and left background. Subjects cluster lower-right."
+    }
+  ]
+}
