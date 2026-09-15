@@ -1,4 +1,5 @@
 export const DEMO_NOW='2026-09-14T10:00:00+03:00';
+export const SEED_VERSION=3;
 export const DAY=86400000;
 export const categories=['Разливные напитки','Напитки в упаковке','Снеки','Безалкогольные'];
 export const storeNames=['Арбат','Сокол','Таганская','Хамовники','Бауманская','Марьино','Измайлово','Митино','Перово','Тверская','Строгино','Бутово'];
@@ -10,39 +11,90 @@ export interface Customer {id:string;birthDate:string|null;consent:boolean;chann
 export interface Dataset {schemaVersion:number;customers:Customer[];products:Product[];receipts:Receipt[];start:string;label:string}
 export interface Filters {from:string;to:string;stores:string[];category?:number;product?:string;discount?:string;known?:string;min?:number;returns?:string}
 export const DEFAULT_FILTERS:Filters={from:'2026-08-17',to:'2026-09-13',stores:[]};
-export const localDay=(at:string)=>new Date(new Date(at).getTime()+3*3600000).toISOString().slice(0,10);
+export const localDay=(at:string)=>at.endsWith('+03:00')?at.slice(0,10):new Date(Date.parse(at)+10800000).toISOString().slice(0,10);
 export const dayStart=(s:string)=>Date.parse(s+'T00:00:00+03:00');
 export const addDays=(s:string,n:number)=>new Date(Date.parse(s+'T12:00:00Z')+n*DAY).toISOString().slice(0,10);
-export const dateRu=(s:string,short=false)=>new Date(s.includes('T')?s:s+'T12:00:00+03:00').toLocaleDateString('ru-RU',{day:'numeric',month:short?'short':'long',timeZone:'Europe/Moscow'});
-export const money=(v:number,digits=0)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:digits,minimumFractionDigits:digits}).format(v/100)+' ₽';
-export const num=(v:number,digits=0)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:digits}).format(v);
+const dateFormats=[false,true].map(short=>new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:short?'short':'long',timeZone:'Europe/Moscow'}));
+const numberFormats=new Map<string,Intl.NumberFormat>();
+function numberFormat(digits:number,fixed=false){const key=digits+':'+fixed;let format=numberFormats.get(key);if(!format){format=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:digits,...(fixed?{minimumFractionDigits:digits}:{})});numberFormats.set(key,format);}return format;}
+export const dateRu=(s:string,short=false)=>dateFormats[Number(short)].format(new Date(s.includes('T')?s:s+'T12:00:00+03:00'));
+export const money=(v:number,digits=0)=>numberFormat(digits,true).format(v/100)+' ₽';
+export const num=(v:number,digits=0)=>numberFormat(digits).format(v);
 export const compact=(v:number)=>Math.abs(v)>=100000000?num(v/100000000,2)+' млн ₽':money(v);
 export const lineNet=(l:Line)=>l.price*l.quantity-l.discount;
 export const receiptNet=(r:Receipt)=>r.lines.reduce((a,l)=>a+lineNet(l),0)*(r.type==='return'?-1:1);
 export function rng(seed:number){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function demandCalendar(){
+ const random=rng(28062026);let demand=0,event=0,basket=0,weekStrength=.1;
+ return Array.from({length:120},(_,d)=>{
+  const date=addDays('2026-05-17',d),weekday=new Date(date+'T12:00Z').getUTCDay(),monthDay=Number(date.slice(8));
+  if(weekday===1)weekStrength=.04+random()*.16;
+  demand=demand*.68+(random()-.5)*.28;
+  event=event*.73+(random()<.09?(random()-.4)*.42:0);
+  basket=basket*.55+(random()-.5)*.2;
+  const payCycle=.065*(Math.exp(-(((monthDay-6)/2.2)**2))+Math.exp(-(((monthDay-21)/2.6)**2)));
+  const weekend=weekday===5?weekStrength:weekday===6?weekStrength*.65:weekday===1?-.055:0;
+  const traffic=Math.exp(demand+event+weekend+payCycle+(random()-.5)*.12);
+  return {count:Math.round((820+d*.9)*traffic),basket,discount:Math.max(.05,.12-basket*.3+event*.15)};
+ });
+}
+function shoppingHour(random:()=>number,weekend:boolean){
+ const weights=weekend?[.035,.045,.07,.09,.10,.09,.10,.11,.12,.11,.08,.035,.015]:[.02,.03,.05,.06,.045,.055,.08,.14,.18,.15,.105,.06,.025];
+ let pick=random()*weights.reduce((s,w)=>s+w,0);
+ for(let i=0;i<weights.length;i++){pick-=weights[i];if(pick<=0)return 10+i;}
+ return 22;
+}
 export function seedData(progress?:(n:number)=>void):Dataset {
  const random=rng(1042026);const integer=(a:number,b:number)=>a+Math.floor(random()*(b-a+1));
+ const calendar=demandCalendar();
  const names=[['Светлый сорт','Янтарный сорт','Тёмный сорт','Пшеничный сорт'],['Классический вкус','Мягкий вкус','Оригинальный вкус','Лёгкий вкус'],['Чипсы с солью','Фисташки','Арахис','Сухарики','Начос'],['Лимонад лимон','Манго и маракуйя','Минеральная вода','Холодный чай']];
  const products:Product[]=Array.from({length:192},(_,i)=>{const cat=i%4;const price=(cat===2?190:cat===3?120:240)+Math.floor(i/4)*10;return{id:`P${String(i+1).padStart(3,'0')}`,name:names[cat][Math.floor(i/4)%names[cat].length]+(i>19?` · ${100+Math.floor(i/4)*10} ${cat===2?'г':'мл'}`:''),category:cat,price:price*100,cost:i===2?11500:Math.round(price*100*[.66,.74,.55,.63][cat]),unit:'шт.'};});
  products[2]={...products[2],name:'Чипсы с солью · 100 г',price:19000,cost:11500};
  const customers:Customer[]=Array.from({length:16000},(_,i)=>({id:`${String(i+1).padStart(5,'0')}`,birthDate:i%11===0?null:`${1970+i%37}-${String(i%12+1).padStart(2,'0')}-15`,consent:i%8!==0,channel:i%13!==0,contacts:i%9===0?3:0,storeId:`S${i%12+1}`,receipts:[]}));
  const receipts:Receipt[]=[];let id=0;
  for(let d=0;d<120;d++){
-  const day=addDays('2026-05-17',d);const week=new Date(day+'T12:00:00Z').getUTCDay();const weight=[.78,.82,.87,.94,1.02,1.43,1.33][week];
-  const count=Math.round((760+d*1.15)*weight);
+  const day=addDays('2026-05-17',d);const week=new Date(day+'T12:00:00Z').getUTCDay();const market=calendar[d];
+  const count=market.count;
   for(let j=0;j<count;j++){
    const anonymous=random()<.2;const cohort=(week===5||week===6)&&random()<.75;const ci=cohort?integer(0,3839):integer(3840,15999);const c=customers[ci];const category=ci<3840?[0,1,3][integer(0,2)]:integer(0,3);
-   const lines:Line[]=Array.from({length:integer(1,3)},(_,k)=>{const cat=k===0?category:(ci<3840?[0,1,3][integer(0,2)]:integer(0,3));const p=products[integer(0,16)*4+cat];const quantity=integer(1,2);return{id:`L${id}-${k}`,productId:p.id,quantity,price:p.price,discount:random()<.12?Math.round(p.price*quantity*.05):0,cost:p.cost===null?null:p.cost*quantity};});
-   const r:Receipt={id:`R${++id}`,storeId:random()<.77?c.storeId:`S${integer(1,12)}`,customerId:anonymous?null:c.id,at:`${day}T${String(integer(10,22)).padStart(2,'0')}:${String(integer(0,59)).padStart(2,'0')}:00+03:00`,type:'sale',lines};
+   const lines:Line[]=Array.from({length:integer(1,3)+(random()<Math.max(0,market.basket)?1:0)},(_,k)=>{const cat=k===0?category:(ci<3840?[0,1,3][integer(0,2)]:integer(0,3));const p=products[integer(0,16)*4+cat];const quantity=random()<.48+market.basket?2:1;return{id:`L${id}-${k}`,productId:p.id,quantity,price:p.price,discount:random()<market.discount?Math.round(p.price*quantity*.05):0,cost:p.cost===null?null:p.cost*quantity};});
+   const r:Receipt={id:`R${++id}`,storeId:random()<.77?c.storeId:`S${integer(1,12)}`,customerId:anonymous?null:c.id,at:`${day}T${String(shoppingHour(random,week===5||week===6)).padStart(2,'0')}:${String(integer(0,59)).padStart(2,'0')}:00+03:00`,type:'sale',lines};
    receipts.push(r);if(!anonymous)c.receipts.push(r);
    if(random()<.008){const ret:Receipt={...r,id:`RT${id}`,type:'return',originalId:r.id,lines:[{...lines[0],id:`RL${id}`,originalLineId:lines[0].id}]};receipts.push(ret);if(!anonymous)c.receipts.push(ret);}
   }if(d%12===0)progress?.(Math.round(d/120*100));
- }return{schemaVersion:2,customers,products,receipts,start:'2026-05-17',label:'Демонстрационный набор'};
+ }return{schemaVersion:SEED_VERSION,customers,products,receipts,start:'2026-05-17',label:'Демонстрационный набор'};
 }
-export function selectReceipts(data:Dataset,f:Filters){const from=dayStart(f.from),to=dayStart(addDays(f.to,1));return data.receipts.filter(r=>{const t=Date.parse(r.at);return t>=from&&t<to&&(!f.stores.length||f.stores.includes(r.storeId))&&(!f.known||f.known==='all'||(f.known==='yes')===!!r.customerId)&&(!f.returns||f.returns==='all'||(f.returns==='yes')===(r.type==='return'))&&(!f.min||Math.abs(receiptNet(r))>=f.min)&&(!f.discount||f.discount==='all'||(f.discount==='yes')===r.lines.some(l=>l.discount>0));}).map(r=>({...r,lines:r.lines.filter(l=>(f.category===undefined||data.products.find(p=>p.id===l.productId)?.category===f.category)&&(!f.product||l.productId===f.product))})).filter(r=>r.lines.length);}
+// Datasets are immutable snapshots; weak ownership releases indexes on replacement.
+const datasetIndexes=new WeakMap<Dataset,{times:Float64Array;products:Map<string,Product>}>();
+function indexDataset(data:Dataset){let index=datasetIndexes.get(data);if(!index){index={times:Float64Array.from(data.receipts,r=>Date.parse(r.at)),products:new Map(data.products.map(p=>[p.id,p]))};datasetIndexes.set(data,index);}return index;}
+export function selectReceipts(data:Dataset,f:Filters){
+ const from=dayStart(f.from),to=dayStart(addDays(f.to,1)),index=indexDataset(data),selected:Receipt[]=[];
+ const storeIds=new Set(f.stores),filterLines=f.category!==undefined||!!f.product;
+ for(let i=0;i<data.receipts.length;i++){
+  const r=data.receipts[i],t=index.times[i];
+  if(t<from||t>=to||storeIds.size&&!storeIds.has(r.storeId)||f.known&&f.known!=='all'&&(f.known==='yes')!==!!r.customerId||f.returns&&f.returns!=='all'&&(f.returns==='yes')!==(r.type==='return')||f.min&&Math.abs(receiptNet(r))<f.min||f.discount&&f.discount!=='all'&&(f.discount==='yes')!==r.lines.some(l=>l.discount>0))continue;
+  if(!filterLines){if(r.lines.length)selected.push(r);continue;}
+  const lines=r.lines.filter(l=>(f.category===undefined||index.products.get(l.productId)?.category===f.category)&&(!f.product||l.productId===f.product));
+  if(lines.length)selected.push(lines.length===r.lines.length?r:{...r,lines});
+ }
+ return selected;
+}
 export function aggregate(receipts:Receipt[]){let revenue=0,cost=0,knownRevenue=0,lines=0,knownLines=0;const sales=new Set<string>(),people=new Set<string>();for(const r of receipts){const sign=r.type==='return'?-1:1;if(r.type==='sale'){sales.add(r.id);if(r.customerId)people.add(r.customerId);}for(const l of r.lines){const net=lineNet(l)*sign;revenue+=net;lines++;if(l.cost!==null){cost+=l.cost*sign;knownRevenue+=net;knownLines++;}}}return{revenue,cost,profit:knownRevenue-cost,count:sales.size,customers:people.size,average:sales.size?Math.round(revenue/sales.size):0,coverage:lines?knownLines/lines:0,margin:knownRevenue?(knownRevenue-cost)/knownRevenue:null};}
-export function report(data:Dataset,f:Filters){const current=selectReceipts(data,f),length=Math.round((dayStart(f.to)-dayStart(f.from))/DAY)+1,previousFilters={...f,from:addDays(f.from,-length),to:addDays(f.from,-1)},previous=selectReceipts(data,previousFilters);const group=(rs:Receipt[],key:(r:Receipt)=>string)=>{const out=new Map<string,Receipt[]>();for(const r of rs){const k=key(r);if(!out.has(k))out.set(k,[]);out.get(k)!.push(r);}return out;};const days=group(current,r=>localDay(r.at)),prevDays=group(previous,r=>localDay(r.at)),byStore=group(current,r=>r.storeId),oldStore=group(previous,r=>r.storeId);
- return{...aggregate(current),previous:aggregate(previous),receipts:current,daily:Array.from({length},(_,i)=>({date:addDays(f.from,i),...aggregate(days.get(addDays(f.from,i))||[]),previous:aggregate(prevDays.get(addDays(previousFilters.from,i))||[])})),stores:stores.map(s=>({...s,...aggregate(byStore.get(s.id)||[]),previous:aggregate(oldStore.get(s.id)||[])})),categories:categories.map((name,i)=>({name,id:i,...aggregate(current.map(r=>({...r,lines:r.lines.filter(l=>data.products.find(p=>p.id===l.productId)?.category===i)})).filter(r=>r.lines.length))}))};
+function computeReport(data:Dataset,f:Filters){const current=selectReceipts(data,f),length=Math.round((dayStart(f.to)-dayStart(f.from))/DAY)+1,previousFilters={...f,from:addDays(f.from,-length),to:addDays(f.from,-1)},previous=selectReceipts(data,previousFilters);const group=(rs:Receipt[],key:(r:Receipt)=>string)=>{const out=new Map<string,Receipt[]>();for(const r of rs){const k=key(r);if(!out.has(k))out.set(k,[]);out.get(k)!.push(r);}return out;};const days=group(current,r=>localDay(r.at)),prevDays=group(previous,r=>localDay(r.at)),byStore=group(current,r=>r.storeId),oldStore=group(previous,r=>r.storeId),byCategory=new Map<number,Receipt[]>(),productIndex=indexDataset(data).products;
+ for(const receipt of current){const lines=new Map<number,Line[]>();for(const line of receipt.lines){const category=productIndex.get(line.productId)?.category;if(category===undefined)continue;if(!lines.has(category))lines.set(category,[]);lines.get(category)!.push(line);}for(const [category,items] of lines){if(!byCategory.has(category))byCategory.set(category,[]);byCategory.get(category)!.push({...receipt,lines:items});}}
+ return{...aggregate(current),previous:aggregate(previous),receipts:current,daily:Array.from({length},(_,i)=>({date:addDays(f.from,i),...aggregate(days.get(addDays(f.from,i))||[]),previous:aggregate(prevDays.get(addDays(previousFilters.from,i))||[])})),stores:stores.map(s=>({...s,...aggregate(byStore.get(s.id)||[]),previous:aggregate(oldStore.get(s.id)||[])})),categories:categories.map((name,i)=>({name,id:i,...aggregate(byCategory.get(i)||[])}))};
+}
+const reportCache=new WeakMap<Dataset,Map<string,ReturnType<typeof computeReport>>>();
+export function report(data:Dataset,f:Filters){
+ const key=JSON.stringify([f.from,f.to,[...f.stores].sort(),f.category??null,f.product||'',f.discount||'all',f.known||'all',f.min||0,f.returns||'all']);
+ let cache=reportCache.get(data);if(!cache){cache=new Map();reportCache.set(data,cache);}
+ const cached=cache.get(key);if(cached){cache.delete(key);cache.set(key,cached);return cached;}
+ const result=computeReport(data,f);cache.set(key,result);if(cache.size>4)cache.delete(cache.keys().next().value!);return result;
+}
+export function productReport(data:Dataset,receipts:Receipt[],f:Filters){
+ const grouped=new Map<string,Receipt[]>();
+ for(const receipt of receipts){const lines=new Map<string,Line[]>();for(const line of receipt.lines){if(!lines.has(line.productId))lines.set(line.productId,[]);lines.get(line.productId)!.push(line);}for(const [id,items] of lines){if(!grouped.has(id))grouped.set(id,[]);grouped.get(id)!.push({...receipt,lines:items});}}
+ return data.products.filter(p=>(f.category===undefined||p.category===f.category)&&(!f.product||p.id===f.product)).map(p=>({...p,...aggregate(grouped.get(p.id)||[]),stock:stores.filter(s=>s.id!=='S12').length*17}));
 }
 export type Field='count'|'spend'|'days'|'average'|'last'|'category'|'weekday'|'store'|'consent'|'channel'|'contacts'|'age';
 export interface Rule {id:string;field:Field;op:string;value:string|number;window:number}
@@ -53,10 +105,16 @@ export const fields:Record<Field,{label:string;ops:string[]}>={count:{label:'Ч�
 export const ops:Record<string,string>={gte:'не меньше',lte:'не больше',eq:'равно',yes:'есть',not:'нет'};
 const statsCache=new WeakMap<Customer,Map<number,any>>();
 export function customerStats(c:Customer,window=90):ReturnType<typeof computeCustomerStats>{let cache=statsCache.get(c);if(!cache){cache=new Map();statsCache.set(c,cache);}if(cache.has(window))return cache.get(window);const result=computeCustomerStats(c,window);cache.set(window,result);return result;}
-function computeCustomerStats(c:Customer,window=90){const start=dayStart('2026-09-14')-window*DAY;const rs=c.receipts.filter(r=>Date.parse(r.at)>=start&&Date.parse(r.at)<dayStart('2026-09-14'));const sale=rs.filter(r=>r.type==='sale');const last=c.receipts.filter(r=>r.type==='sale').reduce((a,r)=>Math.max(a,dayStart(localDay(r.at))),0);const cats=[0,0,0,0];const weekdays=[0,0,0,0,0,0,0];for(const r of sale){weekdays[new Date(localDay(r.at)+'T12:00Z').getUTCDay()]++;for(const l of r.lines)cats[(Number(l.productId.slice(1))-1)%4]+=lineNet(l);}return{...aggregate(rs),days:new Set(sale.map(r=>localDay(r.at))).size,last:last?Math.round((dayStart('2026-09-14')-last)/DAY):null,lastDate:last?new Date(last+3*3600000).toISOString().slice(0,10):null,cats,weekdays,favorite:cats.indexOf(Math.max(...cats)),weekend:sale.length?(weekdays[5]+weekdays[6])/sale.length*100:null};}
+function computeCustomerStats(c:Customer,window=90){const end=dayStart('2026-09-14'),start=end-window*DAY;const rs=c.receipts.filter(r=>{const time=Date.parse(r.at);return time>=start&&time<end;});const sale=rs.filter(r=>r.type==='sale');const last=c.receipts.filter(r=>r.type==='sale').reduce((a,r)=>Math.max(a,dayStart(localDay(r.at))),0);const cats=[0,0,0,0];const weekdays=[0,0,0,0,0,0,0];for(const r of sale){weekdays[new Date(localDay(r.at)+'T12:00Z').getUTCDay()]++;for(const l of r.lines)cats[(Number(l.productId.slice(1))-1)%4]+=lineNet(l);}return{...aggregate(rs),days:new Set(sale.map(r=>localDay(r.at))).size,last:last?Math.round((dayStart('2026-09-14')-last)/DAY):null,lastDate:last?new Date(last+3*3600000).toISOString().slice(0,10):null,cats,weekdays,favorite:cats.indexOf(Math.max(...cats)),weekend:sale.length?(weekdays[5]+weekdays[6])/sale.length*100:null};}
 export function validateGroup(g:Group,depth=0):string[]{const errors:string[]=[];if(depth>2)errors.push('Поддерживается три уровня групп');if(!g.children.length)errors.push('Добавьте условие: пустая группа не включает покупателей');for(const r of g.children){if(isGroup(r))errors.push(...validateGroup(r,depth+1));else if(!fields[r.field]||!fields[r.field].ops.includes(r.op)||!Number.isFinite(Number(r.value))&&r.field!=='store'||Number(r.value)<0||r.window<1||r.window>120)errors.push('Проверьте поле, оператор, значение и окно 1–120 дней');}return errors;}
-export function matches(c:Customer,g:Group,dataStart='2026-05-17'):boolean {if(validateGroup(g).length)return false;const cache=new Map<number,ReturnType<typeof customerStats>>();function test(n:Rule|Group):boolean{if(isGroup(n)){const vals=n.children.map(test);return n.logic==='AND'?vals.every(Boolean):n.logic==='OR'?vals.some(Boolean):!vals.every(Boolean);}if(dayStart('2026-09-14')-dayStart(dataStart)<n.window*DAY)return false;let s=cache.get(n.window);if(!s){s=customerStats(c,n.window);cache.set(n.window,s);}let v:number|string|boolean|null=0;switch(n.field){case'count':v=s.count;break;case'spend':v=s.revenue/100;break;case'days':v=s.days;break;case'average':v=s.count?s.average/100:null;break;case'last':v=s.last;break;case'weekday':v=s.weekend;break;case'category':v=s.cats[Number(n.value)]>0;break;case'store':v=c.storeId;break;case'consent':v=c.consent;break;case'channel':v=c.channel;break;case'contacts':v=c.contacts;break;case'age':v=c.birthDate?2026-Number(c.birthDate.slice(0,4))-(c.birthDate.slice(5)>'09-14'?1:0):null;}if(v===null)return false;if(n.op==='yes')return !!v;if(n.op==='not')return !v;if(n.op==='eq')return String(v)===String(n.value);return n.op==='gte'?Number(v)>=Number(n.value):Number(v)<=Number(n.value);}return test(g);}
-export function audience(data:Dataset,g:Group,storeIds:string[]=[],noChannel=false){const behavior=data.customers.filter(c=>matches(c,g,data.start));const channel=behavior.filter(c=>c.consent&&c.channel&&!noChannel);const frequency=channel.filter(c=>c.contacts<3);const stock=frequency.filter(c=>(!storeIds.length||storeIds.includes(c.storeId))&&c.storeId!=='S12');return{behavior,eligible:stock,excluded:[{reason:'Нет канала или согласия',count:behavior.length-channel.length},{reason:'Лимит контактов: 3 за 30 дней',count:channel.length-frequency.length},{reason:'Магазин вне акции или нет наличия',count:frequency.length-stock.length}]};}
+export function matches(c:Customer,g:Group,dataStart='2026-05-17'):boolean {return validateGroup(g).length?false:matchesValid(c,g,dataStart);}
+function matchesValid(c:Customer,g:Group,dataStart:string):boolean {const cache=new Map<number,ReturnType<typeof customerStats>>();function test(n:Rule|Group):boolean{if(isGroup(n)){return n.logic==='AND'?n.children.every(test):n.logic==='OR'?n.children.some(test):!n.children.every(test);}if(dayStart('2026-09-14')-dayStart(dataStart)<n.window*DAY)return false;let s=cache.get(n.window);if(!s){s=customerStats(c,n.window);cache.set(n.window,s);}let v:number|string|boolean|null=0;switch(n.field){case'count':v=s.count;break;case'spend':v=s.revenue/100;break;case'days':v=s.days;break;case'average':v=s.count?s.average/100:null;break;case'last':v=s.last;break;case'weekday':v=s.weekend;break;case'category':v=s.cats[Number(n.value)]>0;break;case'store':v=c.storeId;break;case'consent':v=c.consent;break;case'channel':v=c.channel;break;case'contacts':v=c.contacts;break;case'age':v=c.birthDate?2026-Number(c.birthDate.slice(0,4))-(c.birthDate.slice(5)>'09-14'?1:0):null;}if(v===null)return false;if(n.op==='yes')return !!v;if(n.op==='not')return !v;if(n.op==='eq')return String(v)===String(n.value);return n.op==='gte'?Number(v)>=Number(n.value):Number(v)<=Number(n.value);}return test(g);}
+function computeAudience(data:Dataset,g:Group,storeIds:string[],noChannel:boolean){const valid=!validateGroup(g).length;const behavior=valid?data.customers.filter(c=>matchesValid(c,g,data.start)):[];const channel=behavior.filter(c=>c.consent&&c.channel&&!noChannel);const frequency=channel.filter(c=>c.contacts<3);const stock=frequency.filter(c=>(!storeIds.length||storeIds.includes(c.storeId))&&c.storeId!=='S12');return{behavior,eligible:stock,excluded:[{reason:'Нет канала или согласия',count:behavior.length-channel.length},{reason:'Лимит контактов: 3 за 30 дней',count:channel.length-frequency.length},{reason:'Магазин вне акции или нет наличия',count:frequency.length-stock.length}]};}
+const audienceCache=new WeakMap<Dataset,Map<string,ReturnType<typeof computeAudience>>>();
+export function audience(data:Dataset,g:Group,storeIds:string[]=[],noChannel=false){
+ const key=JSON.stringify([g,[...storeIds].sort(),noChannel]);let cache=audienceCache.get(data);if(!cache){cache=new Map();audienceCache.set(data,cache);}
+ const cached=cache.get(key);if(cached)return cached;const result=computeAudience(data,g,storeIds,noChannel);cache.set(key,result);if(cache.size>4)cache.delete(cache.keys().next().value!);return result;
+}
 export interface Offer {productId:string;category:number|null;kind:'percent'|'fixed';value:number;cap:number;minBasket:number;minMargin:number;once:boolean;stackable:boolean;stores:string[];from:string;to:string;weekdays:number[];hourFrom:number;hourTo:number;control:number;budget:number;channelCost:number}
 export const defaultOffer:Offer={productId:'P003',category:null,kind:'percent',value:10,cap:5000,minBasket:0,minMargin:25,once:true,stackable:false,stores:stores.map(s=>s.id).filter(id=>id!=='S12'),from:'2026-09-16',to:'2026-09-24',weekdays:[3,4],hourFrom:10,hourTo:22,control:50,budget:25000000,channelCost:0};
 export const economy=(p:Product,o:Offer)=>{const discount=Math.min(o.cap,o.kind==='percent'?Math.round(p.price*o.value/100):o.value*100,p.price);const price=p.price-discount;const profit=p.cost===null?null:price-p.cost;return{discount,price,profit,margin:profit===null||!price?null:profit/price*100};};

@@ -1,0 +1,46 @@
+.chart-period-controls{margin-top:18px;padding:12px 0 13px;border-top:1px solid #ffffff10;border-bottom:1px solid #ffffff10}
+.chart-period-main,.chart-period-shortcuts{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.chart-period-stepper{display:flex;align-items:center;border:1px solid #ffffff17;border-radius:7px;overflow:hidden;min-width:0}
+.chart-period-stepper button,.chart-presets button,.chart-latest{border:0;background:none;color:#c5cbcf;font-size:10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;padding:8px 9px;min-height:30px}
+.chart-period-stepper button:hover,.chart-presets button:hover{background:#ffffff08;color:white}
+.chart-period-stepper button:disabled{opacity:.3}
+.chart-period-stepper .chart-period-trigger{border-inline:1px solid #ffffff12;color:#f2f1ee;gap:8px;padding-inline:12px}
+.chart-granularity{display:flex;align-items:center;gap:5px;color:#9ea7ad;font-size:10px;white-space:nowrap}
+.chart-granularity select{background:#2e3235;border-color:#ffffff17;color:#e0e4e6;border-radius:6px;padding:7px 8px;font-size:10px;cursor:pointer}
+.chart-period-shortcuts{margin-top:8px;gap:6px}
+.chart-presets{display:flex;gap:2px;flex-wrap:wrap}
+.chart-presets button{padding:5px 8px;min-height:26px;font-size:9px;border-radius:5px;color:#a0a9ae}
+.chart-presets button.selected{color:#ffc1a5;background:#6a422c50}
+.chart-latest{padding:5px 0;font-size:9px;color:#c4a998;gap:5px}
+.chart-latest:hover{color:#ffbf9e}
+.calendar-instruction{font-size:13px}
+.calendar-fields{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:14px;margin:20px 0}
+.calendar-fields input{width:100%;font-size:12px;min-height:40px}
+.calendar-length{display:flex;gap:6px}
+.calendar-length input{min-width:50px}
+.calendar-length .button{padding-inline:10px;font-size:11px}
+.calendar-month-nav{display:flex;align-items:center;justify-content:space-between;padding-top:4px}
+.calendar-month-nav>.button{min-height:32px;padding:6px}
+.calendar-month-nav>span{font-size:11px;color:#74797d}
+.calendar-months{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:6px}
+.calendar-month h3{text-align:center;text-transform:capitalize;font-size:14px;font-weight:500;margin:4px 0 16px}
+.calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px 0}
+.calendar-weekday{text-align:center;padding-bottom:9px;font-size:10px;color:#8c9194}
+.calendar-days button{display:grid;place-items:center;border:0;position:relative;min-height:38px;border-radius:6px;background:none;font-size:12px;padding:6px 0;color:#323638}
+.calendar-days button.outside{visibility:hidden}
+.calendar-days button:disabled{color:#b1b4b5;opacity:.55;cursor:default}
+.calendar-days button.inside{background:#fcf0e9;border-radius:0;color:#a84729}
+.calendar-days button.endpoint{background:var(--action);color:white;font-weight:500;border-radius:7px}
+.calendar-days button:hover:not(:disabled):not(.endpoint){background:#f3e2d8}
+.calendar-days button.latest-day:after{content:'';position:absolute;bottom:4px;width:3px;height:3px;border-radius:50%;background:currentColor}
+.calendar-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:18px;border-top:1px solid var(--border)}
+.calendar-bottom small{font-size:10px}
+.calendar-presets{display:flex;gap:7px;flex-wrap:wrap}
+.calendar-presets .button{font-size:11px;min-height:32px;padding:7px 11px}
+.calendar-confirm{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px}
+.calendar-confirm b{display:block;font-size:13px;font-weight:500}
+.calendar-confirm small{display:block;font-size:10px;margin-top:5px}
+.chart-period-controls~.chart-heading{margin-top:16px}
+@media(max-width:1150px){.chart-period-main{gap:6px}.chart-period-stepper button{padding:7px 6px}.chart-period-stepper .chart-period-trigger{padding-inline:7px;gap:5px;font-size:9px}.chart-presets button{font-size:9px;padding-inline:6px}.chart-period-shortcuts{flex-wrap:wrap}.chart-latest{margin-left:auto}}
+@media(max-width:600px){.calendar-fields{grid-template-columns:1fr 1fr;gap:10px}.calendar-fields>.field:last-child{grid-column:1/-1}.calendar-length{max-width:230px}.calendar-months{grid-template-columns:1fr;gap:0}.calendar-month.month-1{display:none}.calendar-days button{min-height:36px}.calendar-bottom{align-items:flex-start;flex-direction:column;gap:10px}.calendar-confirm{align-items:flex-start;flex-direction:column;gap:14px}.calendar-confirm>.button{width:100%}}
+@media(max-width:480px){.chart-period-main{flex-wrap:wrap}.chart-period-stepper{width:100%}.chart-period-stepper .chart-period-trigger{flex:1;padding:9px;font-size:10px}.chart-period-stepper>button{min-width:31px}.chart-granularity{margin-left:auto;font-size:10px;margin-top:4px}.chart-granularity select{padding:6px 10px}.chart-period-shortcuts{gap:5px}.chart-presets{justify-content:space-between;width:100%}.chart-presets button{font-size:9px;padding:7px 6px}.chart-latest{font-size:9px;padding-top:6px}.chart-period-controls{padding-bottom:10px}}

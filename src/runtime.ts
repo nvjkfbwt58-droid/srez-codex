@@ -7,7 +7,9 @@ export function publicAssetURL(path: string, base = import.meta.env?.BASE_URL ||
     : path;
 }
 
+const optimizedAssets=new Set(['copper','kvartal-air','kvartal-right','kvartal-scene','lemon'].map(name=>'/assets/'+name+'.png'));
 export function assetURL(path: string) {
+  if(optimizedAssets.has(path))path=path.replace(/\.png$/,'.webp');
   return isPages ? localAssetURLs.get(path) || publicAssetURL(path) : path;
 }
 

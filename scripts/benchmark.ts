@@ -1,0 +1,10 @@
+import {performance} from 'node:perf_hooks';
+import {seedData,report,audience,baseSegment,DEFAULT_FILTERS,aggregate} from '../src/domain';
+const start=performance.now(),data=seedData(),seedMs=performance.now()-start;
+const time=(name:string,fn:()=>unknown)=>{const t=performance.now();const value=fn();return{name,ms:Math.round((performance.now()-t)*10)/10,value};};
+const first=time('report28Cold',()=>report(data,DEFAULT_FILTERS));
+const cached=time('report28Repeat',()=>report(data,DEFAULT_FILTERS));
+const long=time('report90Cold',()=>report(data,{...DEFAULT_FILTERS,from:'2026-06-16'}));
+const a=time('audienceCold',()=>audience(data,baseSegment));
+const again=time('audienceRepeat',()=>audience(data,baseSegment));
+console.log(JSON.stringify({seedMs,checks:{revenue:first.value.revenue,profit:first.value.profit,eligible:a.value.eligible.length,operations:data.receipts.length},timings:[first,cached,long,a,again].map(({name,ms})=>({name,ms}))},null,2));

@@ -1,0 +1,31 @@
+{
+  "seedMs": 124.96437499999999,
+  "checks": {
+    "revenue": 2281824350,
+    "profit": 769395090,
+    "eligible": 1231,
+    "operations": 110873
+  },
+  "timings": [
+    {
+      "name": "report28Cold",
+      "ms": 98.1
+    },
+    {
+      "name": "report28Repeat",
+      "ms": 0
+    },
+    {
+      "name": "report90Cold",
+      "ms": 190.6
+    },
+    {
+      "name": "audienceCold",
+      "ms": 183.6
+    },
+    {
+      "name": "audienceRepeat",
+      "ms": 0
+    }
+  ]
+}

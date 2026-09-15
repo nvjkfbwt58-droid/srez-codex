@@ -10,3 +10,5 @@ playwright-report/
 storage/
 test-results/
 .sites-runtime/
+
+__qa.html

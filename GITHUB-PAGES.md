@@ -28,6 +28,6 @@ pnpm run preview:pages
 
 Результат — папка `dist-pages`. Её содержимое также можно публиковать как готовый статический сайт без сборки на GitHub. Превью работает на порту 5180.
 
-Браузерная проверка в среде разработки остаётся ограничена недоступной проверкой административной политики встроенного браузера. Автоматические тесты хранилища и сборка не заменяют проверку реального PNG-скачивания и загрузки PDF в браузере.
+Результаты ручной проверки, оптимизации и мобильной версии: [PERFORMANCE.md](PERFORMANCE.md).
 
 Документация: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [публикация через Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).

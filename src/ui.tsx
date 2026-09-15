@@ -1,15 +1,55 @@
-import {useEffect,useRef,useState,type ReactNode,type ButtonHTMLAttributes} from 'react';
-import {animate,motion,useReducedMotion} from 'motion/react';
-import {useReactTable,getCoreRowModel,getSortedRowModel,getFilteredRowModel,getPaginationRowModel,flexRender,type ColumnDef,type SortingState,type VisibilityState} from '@tanstack/react-table';
+import {useEffect,useLayoutEffect,useId,useRef,useState,lazy,Suspense,type ReactNode,type ButtonHTMLAttributes} from 'react';
+import {animate,motion,useInView} from 'motion/react';
+import type {ColumnDef} from '@tanstack/react-table';
 import {X,Search,ChevronLeft,ChevronRight,Download,Columns3,ArrowUpDown} from 'lucide-react';
 import {useStore} from './store';
 import {num} from './domain';
+import {easeOut,settle,useMinimalMotion} from './Motion';
 export const motionTokens={fast:.14,base:.22,expressive:.36,ease:[.22,1,.36,1] as const};
 export function Button({children,primary=false,className='',...props}:ButtonHTMLAttributes<HTMLButtonElement>&{primary?:boolean}){return <button {...props} className={`button ${primary?'primary':''} ${className}`}>{children}</button>}
 export function Field({label,children,hint}:{label:string;children:ReactNode;hint?:string}){return <label className="field"><span>{label}</span>{children}{hint&&<small>{hint}</small>}</label>}
-export function Modal({title,children,onClose,wide=false}:{title:string;children:ReactNode;onClose:()=>void;wide?:boolean}){const ref=useRef<HTMLDialogElement>(null);useEffect(()=>{const previous=document.activeElement as HTMLElement;const d=ref.current!;d.showModal();return()=>{d.close();previous?.focus();};},[]);return <dialog ref={ref} className={wide?'wide':''} onCancel={onClose} onClick={e=>{if(e.target===e.currentTarget)onClose();}}><header><h2>{title}</h2><Button aria-label="Закрыть" onClick={onClose}><X size={18}/></Button></header>{children}</dialog>}
-export function Tabs({value,options,onChange}:{value:string;options:{value:string;label:string}[];onChange:(s:string)=>void}){return <div className="tabs" role="tablist">{options.map(x=><button key={x.value} role="tab" aria-selected={value===x.value} className={value===x.value?'active':''} onClick={()=>onChange(x.value)}>{value===x.value&&<motion.span layoutId={'tabs-'+options.map(x=>x.value).join('-')} className="tab-bg" transition={{type:'spring',stiffness:380,damping:36}}/>}<span>{x.label}</span></button>)}</div>}
-export function Count({value,format=(n:number)=>num(Math.round(n))}:{value:number;format?:(n:number)=>string}){const ref=useRef<HTMLSpanElement>(null),previous=useRef(value);const reduced=useReducedMotion(),setting=useStore(s=>s.settings.motion);useEffect(()=>{if(!ref.current)return;const el=ref.current;if(setting==='minimal'||reduced&&setting!=='full'){el.textContent=format(value);previous.current=value;return;}const control=animate(previous.current,value,{duration:.4,ease:motionTokens.ease,onUpdate:n=>{el.textContent=format(n);},onComplete:()=>{previous.current=value;}});return()=>control.stop();},[value,setting,reduced]);return <><span aria-hidden="true" ref={ref}>{format(value)}</span><span className="sr-only">{format(value)}</span></>}
+export function Modal({title,children,onClose,wide=false}:{title:string;children:ReactNode;onClose:()=>void;wide?:boolean}){
+ const ref=useRef<HTMLDialogElement>(null),closing=useRef(false),minimal=useMinimalMotion(),id=useId();
+ useLayoutEffect(()=>{
+  const previous=document.activeElement as HTMLElement,d=ref.current!;
+  d.showModal();
+  const animation=!minimal&&typeof d.animate==='function'?d.animate([{opacity:0,transform:'translateY(14px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:340,easing:'cubic-bezier(.22,1,.36,1)'}):null;
+  return()=>{animation?.cancel();d.close();previous?.focus();};
+ },[]);
+ const close=()=>{
+  if(closing.current)return;
+  const d=ref.current;
+  if(minimal||!d||typeof d.animate!=='function'){onClose();return;}
+  closing.current=true;d.classList.add('closing');
+  const animation=d.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(8px) scale(.985)'}],{duration:150,easing:'ease-in',fill:'forwards'});
+  animation.finished.then(onClose).catch(()=>{});
+ };
+ return <dialog ref={ref} aria-labelledby={id} className={wide?'wide':''} onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===e.currentTarget)close();}}><header><h2 id={id}>{title}</h2><Button aria-label="Закрыть" onClick={close}><X size={18}/></Button></header>{children}</dialog>;
+}
+export function Tabs({value,options,onChange}:{value:string;options:{value:string;label:string}[];onChange:(s:string)=>void}){
+ const id=useId(),minimal=useMinimalMotion();
+ return <div className="tabs" role="tablist">{options.map(x=><button key={x.value} role="tab" aria-selected={value===x.value} className={value===x.value?'active':''} onClick={()=>onChange(x.value)}>{value===x.value&&<motion.span layoutId={'tabs-'+id} className="tab-bg" transition={minimal?{duration:0}:settle}/>}<span>{x.label}</span></button>)}</div>;
+}
+export function Count({value,format=(n:number)=>num(Math.round(n))}:{value:number;format?:(n:number)=>string}){
+ const ref=useRef<HTMLSpanElement>(null),current=useRef<number|undefined>(undefined),formatter=useRef(format);
+ const minimal=useMinimalMotion(),visible=useInView(ref,{once:true,amount:.2});
+ formatter.current=format;
+ useLayoutEffect(()=>{
+  const el=ref.current;if(!el)return;
+  if(minimal){el.textContent=formatter.current(value);current.current=value;return;}
+  if(!visible){if(current.current===undefined)el.textContent=formatter.current(0);return;}
+  const first=current.current===undefined;
+  const control=animate(current.current??0,value,{duration:first?1.05:.55,delay:first ? .12 : 0,ease:easeOut,onUpdate:n=>{current.current=n;el.textContent=formatter.current(n);},onComplete:()=>{current.current=value;el.textContent=formatter.current(value);}});
+  return()=>control.stop();
+ },[value,minimal,visible]);
+ return <span className="count"><span className="count-measure" aria-hidden="true">{format(value)}</span><span className="count-value" aria-hidden="true" ref={ref}>{format(value)}</span><span className="sr-only">{format(value)}</span></span>;
+}
+export function GrowBar({value,vertical=false,color,delay=0}:{value:number;vertical?:boolean;color?:string;delay?:number}){
+ const minimal=useMinimalMotion();
+ return <motion.i initial={minimal?false:{[vertical?'scaleY':'scaleX']:0}} whileInView={{scaleX:1,scaleY:1}} viewport={{once:true,amount:.1}} animate={vertical?{height:value+'px'}:{width:value+'%'}} transition={{duration:minimal?0:.8,ease:easeOut,delay:minimal?0:delay}} style={{transformOrigin:vertical?'50% 100%':'0 50%',background:color}}/>;
+}
 export function download(name:string,contents:Blob|string,type='text/plain'){const url=URL.createObjectURL(contents instanceof Blob?contents:new Blob([contents],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);}
 export function csv(rows:Record<string,unknown>[],name='srez-export.csv'){if(!rows.length)return;const keys=Object.keys(rows[0]);const escape=(v:unknown)=>{let s=String(v??'');if(/^[\s]*[=+\-@]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};download(name,'\uFEFF'+[keys,...rows.map(r=>keys.map(k=>r[k]))].map(r=>r.map(escape).join(',')).join('\r\n'),'text/csv;charset=utf-8');}
-export function DataTable<T extends object>({data,columns,onRow,selected,searchPlaceholder='Поиск…',pageSize=8,exportName='srez.csv'}:{data:T[];columns:ColumnDef<T,any>[];onRow?:(row:T)=>void;selected?:(row:T)=>boolean;searchPlaceholder?:string;pageSize?:number;exportName?:string}){const [sorting,setSorting]=useState<SortingState>([]),[search,setSearch]=useState(''),[visibility,setVisibility]=useState<VisibilityState>({}),[showColumns,setShowColumns]=useState(false);const table=useReactTable({data,columns,state:{sorting,globalFilter:search,columnVisibility:visibility},onSortingChange:setSorting,onGlobalFilterChange:setSearch,onColumnVisibilityChange:setVisibility,getCoreRowModel:getCoreRowModel(),getSortedRowModel:getSortedRowModel(),getFilteredRowModel:getFilteredRowModel(),getPaginationRowModel:getPaginationRowModel(),initialState:{pagination:{pageSize}}});return <div className="table-container"><div className="table-tools"><label className="search-input"><Search size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={searchPlaceholder} aria-label={searchPlaceholder}/></label><div className="row"><Button onClick={()=>setShowColumns(!showColumns)}><Columns3 size={16}/>Столбцы</Button><Button aria-label="Экспорт таблицы" onClick={()=>csv(table.getFilteredRowModel().rows.map(r=>Object.fromEntries(table.getVisibleLeafColumns().map(c=>[typeof c.columnDef.header==='string'?c.columnDef.header:c.id,r.getValue(c.id)]))),exportName)}><Download size={16}/></Button></div></div>{showColumns&&<div className="column-picker">{table.getAllLeafColumns().map(c=><label key={c.id}><input type="checkbox" checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}/>{typeof c.columnDef.header==='string'?c.columnDef.header:c.id}</label>)}</div>}<div className="table-scroll"><table><thead>{table.getHeaderGroups().map(g=><tr key={g.id}>{g.headers.map(h=><th key={h.id}><button onClick={h.column.getToggleSortingHandler()}>{flexRender(h.column.columnDef.header,h.getContext())}{h.column.getCanSort()&&<ArrowUpDown size={11}/>}</button></th>)}</tr>)}</thead><tbody>{table.getRowModel().rows.map(r=><tr key={r.id} className={selected?.(r.original)?'selected':''} tabIndex={onRow?0:undefined} onClick={()=>onRow?.(r.original)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' ')onRow?.(r.original);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const el=e.key==='ArrowDown'?e.currentTarget.nextElementSibling:e.currentTarget.previousElementSibling;(el as HTMLElement)?.focus();}}}>{r.getVisibleCells().map(c=><td key={c.id}>{flexRender(c.column.columnDef.cell,c.getContext())}</td>)}</tr>)}</tbody></table>{!table.getFilteredRowModel().rows.length&&<div className="empty">Ничего не найдено. Измените условия поиска.</div>}</div><footer><span>{table.getFilteredRowModel().rows.length?table.getState().pagination.pageIndex*pageSize+1:0}–{Math.min((table.getState().pagination.pageIndex+1)*pageSize,table.getFilteredRowModel().rows.length)} из {num(table.getFilteredRowModel().rows.length)}</span><div className="row"><Button aria-label="Предыдущая страница" disabled={!table.getCanPreviousPage()} onClick={()=>table.previousPage()}><ChevronLeft size={16}/></Button><span>{table.getState().pagination.pageIndex+1} / {Math.max(1,table.getPageCount())}</span><Button aria-label="Следующая страница" disabled={!table.getCanNextPage()} onClick={()=>table.nextPage()}><ChevronRight size={16}/></Button></div></footer></div>}
+
+const LazyDataTable=lazy(()=>import('./DataTable').then(m=>({default:m.DataTable})));
+export function DataTable<T extends object>(props:{data:T[];columns:ColumnDef<T,any>[];onRow?:(row:T)=>void;selected?:(row:T)=>boolean;searchPlaceholder?:string;pageSize?:number;exportName?:string}){const Table=LazyDataTable as React.ComponentType<typeof props>;return <Suspense fallback={<div className="route-loading" role="status">Готовим таблицу…</div>}><Table {...props}/></Suspense>;}
