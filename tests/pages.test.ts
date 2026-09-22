@@ -63,3 +63,34 @@ test('Pages asset paths support project subdirectories and custom domains', () =
   assert.equal(publicAssetURL('/favicon.svg', '/'), '/favicon.svg');
   assert.equal(publicAssetURL('/uploads/test.png', '/srez/'), '/uploads/test.png');
 });
+
+test('Pages version deletion persists, can be undone and preserves existing coupons',async()=>{
+ const storage=memoryStorage(),store=createPagesStore(storage);
+ const profile=(await store.request('/brands/kvartal')).profile;
+ await assert.rejects(store.request('/brands/kvartal/versions/1',{},'DELETE'),/единственную/);
+ await store.request('/brands/kvartal/versions',{...profile,name:'Test v2'});
+ await store.request('/coupons/CP-104/design',{design:{...defaultDesign,brandVersion:2},expectedRevision:0});
+ const coupon=await store.request('/coupons/CP-104');
+ await assert.rejects(store.request('/brands/copper/versions/2',{},'DELETE'),/не найдена/);
+ const deleted=await store.request('/brands/kvartal/versions/2',{},'DELETE');
+ assert.equal(deleted.version,1);assert.equal(deleted.name,profile.name);
+ const reopened=createPagesStore(storage);
+ assert.deepEqual((await reopened.request('/brands/kvartal')).versions.map((v:any)=>v.version),[1]);
+ assert.deepEqual(await reopened.request('/coupons/CP-104'),coupon);
+ assert.equal((await reopened.request('/brands/kvartal/versions',profile)).version,3);
+ await reopened.request('/brands/kvartal/versions/2/restore',{});
+ assert.deepEqual((await reopened.request('/brands/kvartal')).versions.map((v:any)=>v.version),[1,2,3]);
+});
+
+test('Pages material deletion persists and restores only its own PDF pages',async()=>{
+ const storage=memoryStorage(),store=createPagesStore(storage);
+ const files=[{id:'pdf',mime:'application/pdf'},{id:'page1',parentId:'pdf',mime:'image/png'},{id:'page2',parentId:'pdf',mime:'image/png'}].map(a=>({...a,brandId:'kvartal',name:a.id,url:'/uploads/'+a.id+'.png',role:'style',source:'browser'}));
+ await store.saveAssets('kvartal',files);
+ await store.request('/brands/kvartal/assets/page1',{},'DELETE');
+ await store.request('/brands/kvartal/assets/pdf',{},'DELETE');
+ const reopened=createPagesStore(storage);
+ assert.equal((await reopened.request('/brands/kvartal')).assets.filter((a:any)=>a.source==='browser').length,0);
+ await reopened.request('/brands/kvartal/assets/pdf/restore',{});
+ assert.deepEqual((await reopened.request('/brands/kvartal')).assets.filter((a:any)=>a.source==='browser').map((a:any)=>a.id),['pdf','page2']);
+ assert.equal((await reopened.assets()).length,files.length+5);
+});

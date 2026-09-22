@@ -1,0 +1,29 @@
+import {useMemo,useState} from 'react';
+import {Plus,Trash2,Wallet,Check} from 'lucide-react';
+import {useStore} from './store';
+import {stores,money,type Filters,type report} from './domain';
+import {expensePlanSchema,reportAfterExpenses,hasTransactionFilters,type ExpensePlan} from './expenses';
+import {Button,Modal,Field} from './ui';
+export function useProfitReport(r:ReturnType<typeof report>,filters:Filters){
+ const plans=useStore(s=>s.expenses),mode=useStore(s=>s.profitMode);
+ const costs=useMemo(()=>reportAfterExpenses(r,filters,plans),[r,JSON.stringify(filters),plans]);
+ const net=mode==='net'&&costs.ready;
+ return{...costs,isNet:net,display:net?costs.net:r};
+}
+export function ProfitControls({filters,result}:{filters:Filters;result:ReturnType<typeof useProfitReport>}){
+ const [editing,setEditing]=useState(false);
+ const configured=result.current.stores.filter(s=>s.complete).length;
+ return <><section className="profit-controls"><div><div className="profit-switch" role="group" aria-label="Расчёт прибыли"><button aria-pressed={!result.isNet} onClick={()=>useStore.setState({profitMode:'gross'})}>Валовая</button><button aria-pressed={result.isNet} onClick={()=>{useStore.setState({profitMode:'net'});if(!result.ready&&!hasTransactionFilters(filters))setEditing(true);}}>С расходами</button></div><small>{result.current.complete&&!result.ready&&!hasTransactionFilters(filters)?'Не хватает себестоимости. Полная чистая прибыль пока недоступна.':hasTransactionFilters(filters)?'Расходы считаются для магазина целиком. Сбросьте фильтры товаров и чеков.':result.isNet?`Учтено расходов: ${money(result.current.total)} · ${result.comparable?'сравнение с предыдущим периодом':'для сравнения внесите расходы прошлого периода'}`:`Расходы заполнены: ${configured} из ${result.current.stores.length} магазинов`}</small></div><Button onClick={()=>setEditing(true)}><Wallet size={16}/>Расходы магазинов</Button></section>{result.isNet&&<p className="profit-note">Чистая прибыль по внесённым расходам. Добавьте налоги, списания и прочие затраты для полного расчёта.</p>}{editing&&<ExpenseEditor filters={filters} onClose={()=>setEditing(false)}/>}</>;
+}
+export function ExpenseEditor({filters,onClose}:{filters:Filters;onClose:()=>void}){
+ const plans=useStore(s=>s.expenses),notify=useStore(s=>s.notify);
+ const [storeId,setStoreId]=useState(filters.stores[0]||'S1'),[month,setMonth]=useState(filters.from.slice(0,7));
+ return <Modal title="Расходы магазинов" onClose={onClose} wide><p>Укажите суммы за месяц. Они действуют с выбранного месяца до следующего изменения. В отчёте за неделю учитывается только доля за выбранные дни.</p><div className="form-grid"><Field label="Магазин"><select value={storeId} onChange={e=>setStoreId(e.target.value)}>{stores.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></Field><Field label="Начиная с месяца"><input type="month" value={month} onChange={e=>{if(e.target.value)setMonth(e.target.value);}}/></Field></div><ExpenseFields key={storeId+month} storeId={storeId} month={month} plans={plans} onSave={plan=>{useStore.setState({expenses:[...plans.filter(p=>p.storeId!==plan.storeId||p.fromMonth!==plan.fromMonth),plan]});notify('Расходы сохранены. Прибыль пересчитана.');}}/><div className="expense-store-list">{stores.map(s=><button key={s.id} className={s.id===storeId?'active':''} onClick={()=>setStoreId(s.id)}>{s.name}{plans.some(p=>p.storeId===s.id&&p.fromMonth<=month)&&<Check size={13}/>}</button>)}</div><div className="modal-actions"><Button onClick={onClose}>Готово</Button></div></Modal>;
+}
+function ExpenseFields({storeId,month,plans,onSave}:{storeId:string;month:string;plans:ExpensePlan[];onSave:(p:ExpensePlan)=>void}){
+ const existing=plans.filter(p=>p.storeId===storeId&&p.fromMonth<=month).sort((a,b)=>b.fromMonth.localeCompare(a.fromMonth))[0];
+ const [rows,setRows]=useState(()=>existing?.items.map(i=>({...i,value:String(i.amount/100)}))||['Зарплаты','Аренда','Коммунальные услуги','Налоги'].map((name,i)=>({id:String(i),name,amount:0,value:''}))),[error,setError]=useState(''),[saved,setSaved]=useState(false);
+ const edit=(id:string,patch:Partial<typeof rows[number]>)=>{setSaved(false);setRows(rows.map(r=>r.id===id?{...r,...patch}:r));};
+ function save(){try{if(rows.some(r=>r.value.trim()===''||!Number.isFinite(Number(r.value))||Number(r.value)<0))throw new Error('Укажите сумму каждой статьи. Если расходов нет, введите 0.');const plan=expensePlanSchema.parse({storeId,fromMonth:month,items:rows.map(r=>({id:r.id,name:r.name,amount:Math.round(Number(r.value)*100)}))});onSave(plan);setError('');setSaved(true);}catch(e){setError(e instanceof Error&&!(e.name==='ZodError')?e.message:'Проверьте названия и суммы расходов.');}}
+ return <><div className="expense-rows">{rows.map((r,i)=><div className="expense-row" key={r.id}><input aria-label={`Статья расходов ${i+1}`} value={r.name} maxLength={80} onChange={e=>edit(r.id,{name:e.target.value})}/><label><input aria-label={`Сумма расходов ${i+1}`} inputMode="decimal" type="number" min="0" step="0.01" placeholder="0" value={r.value} onChange={e=>edit(r.id,{value:e.target.value})}/><span>₽ / мес.</span></label><Button aria-label={`Удалить статью ${r.name}`} onClick={()=>{setRows(rows.filter(x=>x.id!==r.id));setSaved(false);}}><Trash2 size={15}/></Button></div>)}</div><Button onClick={()=>{setRows([...rows,{id:crypto.randomUUID(),name:'Прочие расходы',amount:0,value:''}]);setSaved(false);}}><Plus size={15}/>Добавить статью</Button><div className="split section-gap"><span>Итого в месяц</span><strong>{money(rows.reduce((s,r)=>s+(Number(r.value)||0)*100,0))}</strong></div>{error&&<p className="error-box" role="alert">{error}</p>}{saved&&<p className="success-box" role="status">Сохранено для выбранного магазина</p>}<div className="modal-actions"><Button primary onClick={save}><Check size={15}/>Сохранить расходы</Button></div></>;
+}

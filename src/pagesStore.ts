@@ -3,13 +3,15 @@ import {themes, type Design} from './domain';
 import {initialProfile} from './initialBrandProfile';
 import {profileSchema, type BrandProfile} from './brandSchema';
 import {designSchema} from './designSchema';
+import {changeBrandAssets} from './brandAssets';
 import {rememberAsset} from './runtime';
+import {changeBrandVersion,nextBrandVersion,type StoredBrandVersion} from './brandVersions';
 
 export interface LocalAsset {
   id: string; brandId: string; name: string; mime: string; url: string;
-  role: string; source: string; blob?: Blob; page?: number; parentId?: string;
+  deletedAt?:string; deletedWith?:string; role: string; source: string; blob?: Blob; page?: number; parentId?: string;
 }
-interface LocalBrand {id: string; brandId: string; name: string; version: number; versions: BrandProfile[]; assets: LocalAsset[]}
+interface LocalBrand {id: string; brandId: string; name: string; version: number; versions: StoredBrandVersion[]; assets: LocalAsset[]}
 interface LocalCoupon {id: string; brandId: string; revision: number; design: Design | null}
 export interface PagesData {brands: LocalBrand[]; coupons: Record<string, LocalCoupon>}
 export interface PagesPersistence {
@@ -58,20 +60,32 @@ export function createPagesStore(storage: PagesPersistence) {
       });
       return {assets};
     },
-    async request(url: string, body?: unknown): Promise<any> {
+    async request(url: string, body?: unknown, method=body===undefined?'GET':'POST'): Promise<any> {
       if (url === '/status') return {connected: false, analysisConnected: false, mode: 'pages', storage: 'browser', models: {image: 'Не подключена', analysis: 'Не подключён'}, limits: {daily: 0, concurrent: 0, fileMB: 10}};
       if (/\/(generations|edits|analyses)$/.test(url)) throw new Error('В этой версии новые AI-изображения недоступны. Для генерации и анализа нужен отдельный сервер. Готовые примеры и ручное редактирование доступны.');
       if (url.startsWith('/jobs/')) return {id: url.split('/')[2], status: 'interrupted', error: {message: 'Работа требует сервера и не выполнялась в версии GitHub Pages.'}};
       const parts = url.split('/').filter(Boolean);
       if (parts[0] === 'brands') {
         if (!parts[1]) return (await storage.read() || initialPagesData()).brands.map(({versions, assets, ...brand}) => brand);
-        if (parts[2] === 'versions' && body !== undefined) {
+        if(parts[2]==='assets'&&(parts.length===4&&method==='DELETE'||parts.length===5&&parts[4]==='restore'&&method==='POST')){
+          return storage.mutate(data=>{const brand=brandOf(data,parts[1]);brand.assets=changeBrandAssets(brand.assets,parts[3],method==='POST');return{...brand,assets:brand.assets.filter(a=>!a.deletedAt),versions:brand.versions.filter(v=>!v.deletedAt),profile:brand.versions.find(v=>v.version===brand.version)};});
+        }
+        if(parts[2]==='versions'&&(parts.length===4&&method==='DELETE'||parts.length===5&&parts[4]==='restore'&&method==='POST')){
+          return storage.mutate(data=>{
+            const brand=brandOf(data,parts[1]);
+            const changed=changeBrandVersion(brand,brand.versions,Number(parts[3]),method==='POST');
+            Object.assign(brand,{version:changed.brand.version,name:changed.brand.name});
+            brand.versions=brand.versions.map(v=>v.version===changed.version.version?changed.version:v);
+            return {...brand,assets:brand.assets.filter(a=>!a.deletedAt),versions:brand.versions.filter(v=>!v.deletedAt),profile:brand.versions.find(v=>v.version===brand.version)};
+          });
+        }
+        if (parts[2] === 'versions' && parts.length===3 && method==='POST' && body !== undefined) {
           const profile = profileSchema.parse(body);
           return storage.mutate(data => {
             const brand = brandOf(data, parts[1]);
             if (profile.brandId !== brand.id) throw new Error('Профиль принадлежит другой сети');
             for (const id of [...profile.sourceAssets, ...profile.provenance.flatMap(p => p.sourceAssetIds), profile.logoAssetId, profile.typography.display.assetId, profile.typography.body.assetId].filter((s): s is string => !!s)) ownedAsset(brand, id);
-            const next = {...profile, version: brand.version + 1, status: 'confirmed' as const};
+            const next = {...profile, version: nextBrandVersion(brand.versions), status: 'confirmed' as const};
             brand.version = next.version;
             brand.name = next.name;
             brand.versions.push(next);
@@ -80,7 +94,7 @@ export function createPagesStore(storage: PagesPersistence) {
         }
         if (parts.length === 2 && body === undefined) {
           const brand = brandOf(await storage.read() || initialPagesData(), parts[1]);
-          return {...brand, profile: brand.versions.find(v => v.version === brand.version)};
+          return {...brand, assets:brand.assets.filter(a=>!a.deletedAt), versions:brand.versions.filter(v=>!v.deletedAt), profile: brand.versions.find(v => v.version === brand.version)};
         }
       }
       if (parts[0] === 'coupons' && /^[\w-]{1,100}$/.test(parts[1] || '') && !['__proto__', 'constructor', 'prototype'].includes(parts[1])) {

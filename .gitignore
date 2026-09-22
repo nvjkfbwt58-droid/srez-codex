@@ -12,3 +12,5 @@ test-results/
 .sites-runtime/
 
 __qa.html
+
+.vite/

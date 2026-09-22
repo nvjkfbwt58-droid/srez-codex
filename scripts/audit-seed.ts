@@ -29,8 +29,8 @@ try {
   await writeFile(join(directory,'demo-dataset.json'),JSON.stringify(data));
   await writeFile(join(directory,'empty.env'),'');
   const totals=report(data,DEFAULT_FILTERS);
-  assert.equal(data.receipts.length,110873);
-  assert.equal(totals.revenue,2281824350);
+  assert.equal(data.receipts.length,60670);
+  assert.equal(totals.revenue,980959050);
   const manifest={directory,database:join(directory,'srez.sqlite'),dotenv:join(directory,'empty.env'),dataset:join(directory,'demo-dataset.json'),schemaVersion:data.schemaVersion,brands:store.all('brand').map(b=>b.id),coupons:['AUDIT-kvartal','AUDIT-copper'],accounts:[],operations:data.receipts.length,revenueKopecks:totals.revenue};
   await writeFile(join(directory,'audit-manifest.json'),JSON.stringify(manifest,null,2));
   console.log(JSON.stringify(manifest,null,2));

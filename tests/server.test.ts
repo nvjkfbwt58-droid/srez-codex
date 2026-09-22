@@ -18,3 +18,45 @@ test('interrupted work restored on server restart without rerun',async()=>{const
 test('brand analysis uses own references and saves confirmed version',async()=>{const h=await harness({analysis:{analyze:async(p:any,a:any[])=>({...p,status:'draft',sourceAssets:a.map(x=>x.id)})}});try{const r=await h.request('/brands/kvartal/analyses',{...input,referenceAssetIds:['example-kvartal-0']});const j=await wait(h.request,r.body.jobId);assert.equal(j.status,'ready');assert.equal(j.profile.status,'draft');const v=await h.request('/brands/kvartal/versions',j.profile);assert.equal(v.body.version,2);assert.equal(v.body.status,'confirmed');assert.equal((await h.request('/brands/kvartal')).body.version,2);}finally{await h.close();}});
 test('upload rejects active SVG and enforces file ownership',async()=>{const h=await harness();try{const body=new FormData();body.append('files',new Blob(['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'],{type:'image/svg+xml'}),'unsafe.svg');const r=await fetch(`http://127.0.0.1:${h.port}/api/brands/kvartal/assets`,{method:'POST',body});assert.equal(r.status,400);const img=new FormData();img.append('files',new Blob([new Uint8Array(await readFile('public/assets/kvartal-air.png'))],{type:'image/png'}),'test.png');const a=await fetch(`http://127.0.0.1:${h.port}/api/brands/kvartal/assets`,{method:'POST',body:img});assert.equal(a.status,201);const b=await a.json() as any;const cross=await h.request('/coupons/x/generations',{...input,brandId:'copper',referenceAssetIds:[b.assets[0].id]});assert.equal(cross.status,403);}finally{await h.close();}});
 test('SDK adapter uses actual image API generate/edit with maxRetries zero',async()=>{const p=new OpenAIProviders('test-only-not-a-secret','gpt-image-2.5-sunburst','gpt-4.1');const operations:any[]=[];(p.client.images as any).generate=async(body:any)=>{operations.push(body);return{data:[{b64_json:Buffer.from('test').toString('base64')}]};};(p.client.images as any).edit=async(body:any)=>{operations.push(body);return{data:[{b64_json:Buffer.from('test-edit').toString('base64')}]};};assert.equal((await p.generate('test',[],'low',new AbortController().signal)).bytes.toString(),'test');await p.generate('edit',[{id:'a',brandId:'kvartal',path:resolve('public/assets/kvartal-right.png'),url:'',name:'x.png',mime:'image/png',role:'edit target',source:'example'}],'medium',new AbortController().signal);assert.ok(operations[1].image.length===1);assert.equal(operations[1].model,'gpt-image-2.5-sunburst');assert.equal(p.client.maxRetries,0);assert.equal(providerError({status:401}).code,'auth');assert.equal(providerError({name:'APIConnectionTimeoutError'}).code,'uncertain');});
+
+test('brand version removal keeps coupon snapshots, restores history and never reuses numbers',async()=>{
+ const h=await harness();
+ const remove=async(brand:string,version:string)=>{const r=await fetch(`http://127.0.0.1:${h.port}/api/brands/${brand}/versions/${version}`,{method:'DELETE'});return{status:r.status,body:await r.json() as any};};
+ try{
+  const original=(await h.request('/brands/kvartal')).body.profile;
+  assert.equal((await remove('kvartal','1')).status,409);
+  await h.request('/brands/kvartal/versions',{...original,name:'Test v2'});
+  await h.request('/coupons/CP-104/design',{design:{...defaultDesign,brandVersion:2},expectedRevision:0});
+  const before=h.store.get('coupon','CP-104');
+  assert.equal((await remove('copper','2')).status,404);
+  assert.equal((await remove('kvartal','nope')).status,404);
+  const deleted=await remove('kvartal','2');
+  assert.equal(deleted.status,200);assert.equal(deleted.body.version,1);assert.equal(deleted.body.name,original.name);
+  assert.deepEqual(deleted.body.versions.map((v:any)=>v.version),[1]);
+  assert.ok(h.store.get('version','kvartal-v2').deletedAt);
+  assert.deepEqual(h.store.get('coupon','CP-104'),before);
+  assert.equal((await remove('kvartal','2')).status,200);
+  assert.equal((await h.request('/brands/kvartal/versions',original)).body.version,3);
+  const restored=await h.request('/brands/kvartal/versions/2/restore',{});
+  assert.deepEqual(restored.body.versions.map((v:any)=>v.version),[1,2,3]);
+  assert.equal(restored.body.version,3);assert.equal(h.store.get('version','kvartal-v2').deletedAt,undefined);
+  createApp({store:h.store,publicDir:resolve('public')});
+  assert.equal((await h.request('/brands/kvartal')).body.version,3);
+ }finally{await h.close();}
+});
+
+test('material removal and restore are brand-scoped and preserve bytes and coupon snapshots',async()=>{
+ const h=await harness();
+ try{
+  const asset=h.store.get('asset','example-kvartal-0');
+  await h.request('/coupons/CP-104/design',{design:defaultDesign,expectedRevision:0});
+  const before=h.store.get('coupon','CP-104');
+  const del=async(brand:string,id:string)=>{const r=await fetch(`http://127.0.0.1:${h.port}/api/brands/${brand}/assets/${id}`,{method:'DELETE'});return{status:r.status,body:await r.json() as any};};
+  assert.equal((await del('copper',asset.id)).status,404);
+  const removed=await del('kvartal',asset.id);
+  assert.equal(removed.status,200);assert.ok(!removed.body.assets.some((a:any)=>a.id===asset.id));
+  assert.ok((await readFile(asset.path)).length>0);assert.deepEqual(h.store.get('coupon','CP-104'),before);
+  const restored=await h.request(`/brands/kvartal/assets/${asset.id}/restore`,{});
+  assert.ok(restored.body.assets.some((a:any)=>a.id===asset.id));
+ }finally{await h.close();}
+});

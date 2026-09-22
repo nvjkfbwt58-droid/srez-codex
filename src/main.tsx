@@ -14,6 +14,8 @@ import './motion.css';
 import './calendar.css';
 import './assistant.css';
 import './mobile.css';
+import './workflow.css';
+import './network-map.css';
 async function mount(){
  if(isPages)await (await import('./pagesStore')).initializePages();
  const Router=isPages?HashRouter:BrowserRouter;

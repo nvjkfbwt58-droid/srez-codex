@@ -1,9 +1,24 @@
-import {createContext,useContext,useLayoutEffect,useRef,type ReactNode} from 'react';
+import {createContext,useContext,useLayoutEffect,useRef,useState,type ReactNode,type RefObject} from 'react';
 
 export const easeOut=[.22,1,.36,1] as const;
 export const settle={type:'spring',stiffness:420,damping:38,mass:.9} as const;
 export const MotionPreference=createContext(false);
 export const useMinimalMotion=()=>useContext(MotionPreference);
+
+// Rearm only after a full exit, so tiny movements at the viewport edge do not restart motion.
+export function useReplayInView(ref:RefObject<Element|null>,stableParent=false){
+ const [visible,setVisible]=useState(false);
+ useLayoutEffect(()=>{
+  const el=stableParent?ref.current?.parentElement:ref.current;if(!el)return;
+  if(typeof IntersectionObserver==='undefined'){setVisible(true);return;}
+  const observer=new IntersectionObserver(([entry])=>{
+   if(!entry.isIntersecting)setVisible(false);
+   else if(entry.intersectionRatio>=.12)setVisible(true);
+  },{threshold:[0,.12]});
+  observer.observe(el);return()=>observer.disconnect();
+ },[ref,stableParent]);
+ return visible;
+}
 
 // Animate only independent surfaces. Nested controls and coupon artwork keep their geometry.
 const surfaces=[
@@ -11,7 +26,8 @@ const surfaces=[
  '.campaign-card','.table-container','.segment-panel','.editor-form','.editor-preview',
  '.studio-heading','.studio-toolbar','.coupon-canvas','.variant-strip','.ai-panel',
  '.brand-board > .panel','.brand-preview','.data-grid > .panel','.experiment-grid > .panel',
- '.assistant-intro','.ask-bar','.footnote','.route-content > .panel',
+ '.assistant-welcome','.assistant-compose','.assistant-exchange',
+ '.network-map-teaser','.map-summary','.ask-bar','.footnote','.route-content > .panel',
 ].join(',');
 
 export function PageEntrance({children}:{children:ReactNode}){
@@ -19,29 +35,53 @@ export function PageEntrance({children}:{children:ReactNode}){
  useLayoutEffect(()=>{
   const root=ref.current;
   if(!root||minimal||typeof Element.prototype.animate!=='function')return;
-  const candidates=[...root.querySelectorAll<HTMLElement>(surfaces)];
-  const elements=candidates.filter(el=>!candidates.some(parent=>parent!==el&&parent.contains(el)));
-  const animations=new Set<Animation>();
+  const elements=new Set<HTMLElement>(),entered=new Set<Element>();
+  const animations=new Map<HTMLElement,Animation>();
   const reveal=(el:HTMLElement,delay=0)=>{
+   animations.get(el)?.cancel();
    const animation=el.animate([
     {opacity:0,transform:'translate3d(0,18px,0)'},
     {opacity:1,transform:'translate3d(0,0,0)'},
    ],{duration:720,delay,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
-   animations.add(animation);
-   animation.onfinish=()=>animations.delete(animation);
+   animations.set(el,animation);
+   animation.onfinish=()=>animations.delete(el);
   };
   const observer=typeof IntersectionObserver==='undefined'?null:new IntersectionObserver(entries=>{
-   for(const entry of entries)if(entry.isIntersecting){reveal(entry.target as HTMLElement);observer?.unobserve(entry.target);}
-  },{threshold:.08});
-  // Read all positions before starting animations to avoid repeated layout calculations.
-  const positions=elements.map(el=>({el,rect:el.getBoundingClientRect()}));
-  let visible=0;
-  for(const {el,rect} of positions){
-   if(!rect.width||!rect.height)continue;
-   if(rect.top<window.innerHeight&&rect.bottom>0)reveal(el,70+Math.min(visible++,6)*55);
-   else observer?.observe(el);
-  }
-  return()=>{observer?.disconnect();for(const animation of animations)animation.cancel();};
+   for(const entry of entries){
+    if(!entry.isIntersecting){
+     entered.delete(entry.target);
+     animations.get(entry.target as HTMLElement)?.cancel();
+     animations.delete(entry.target as HTMLElement);
+    }else if(entry.intersectionRatio>=.08&&!entered.has(entry.target)){
+     entered.add(entry.target);reveal(entry.target as HTMLElement);
+    }
+   }
+  },{threshold:[0,.08]});
+  const discover=()=>{
+   for(const el of elements)if(!root.contains(el)){
+    observer?.unobserve(el);animations.get(el)?.cancel();animations.delete(el);entered.delete(el);elements.delete(el);
+   }
+   const candidates=[...root.querySelectorAll<HTMLElement>(surfaces)];
+   const fresh=candidates.filter(el=>!elements.has(el)&&!candidates.some(parent=>parent!==el&&parent.contains(el)));
+   // Read positions together; only transforms and opacity change during the reveal.
+   const positions=fresh.map(el=>({el,rect:el.getBoundingClientRect()}));
+   let visible=0;
+   for(const {el,rect} of positions){
+    elements.add(el);observer?.observe(el);
+    if(rect.width&&rect.height&&rect.top<window.innerHeight&&rect.bottom>0){
+     entered.add(el);reveal(el,70+Math.min(visible++,6)*55);
+    }
+   }
+  };
+  discover();
+  // Lazy routes and newly added cards can arrive after PageEntrance mounts.
+  let frame=0;
+  const mutations=new MutationObserver(records=>{
+   if(frame||!records.some(record=>[...record.addedNodes,...record.removedNodes].some(node=>node instanceof Element)))return;
+   frame=requestAnimationFrame(()=>{frame=0;discover();});
+  });
+  mutations.observe(root,{childList:true,subtree:true});
+  return()=>{mutations.disconnect();cancelAnimationFrame(frame);observer?.disconnect();for(const animation of animations.values())animation.cancel();};
  },[minimal]);
  return <div ref={ref} className="route-content">{children}</div>;
 }
