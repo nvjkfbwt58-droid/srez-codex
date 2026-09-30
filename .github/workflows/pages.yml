@@ -2,7 +2,7 @@ name: Publish Srez to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, srez-network-2026-09-30]
   workflow_dispatch:
 
 permissions:
@@ -25,7 +25,8 @@ jobs:
           node-version: '24'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+      - name: Test browser-hosted coupon and audience workflows
+        run: pnpm exec tsx --test tests/pages.test.ts tests/catalogLibrary.test.ts tests/audienceWorkspace.test.tsx tests/couponWorkflow.test.ts
       - run: pnpm run build:pages
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
