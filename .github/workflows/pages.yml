@@ -2,7 +2,7 @@ name: Publish Srez to GitHub Pages
 
 on:
   push:
-    branches: [main, srez-network-2026-09-30]
+    branches: [main]
   workflow_dispatch:
 
 permissions:

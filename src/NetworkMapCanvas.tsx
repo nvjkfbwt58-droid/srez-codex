@@ -33,7 +33,7 @@ export const NetworkMapCanvas=forwardRef<MapHandle,Props>(function NetworkMapCan
    resize?.disconnect();
    try{
     const bounds:[[number,number],[number,number]]=[[37.35,55.53],[37.81,55.86]];
-    const m=new lib.Map({container:container.current,style:'https://tiles.openfreemap.org/styles/positron',bounds,fitBoundsOptions:{padding:65},pitch:0,cooperativeGestures:true,locale:{'ScrollZoomBlocker.CtrlMessage':'Для масштаба удерживайте Ctrl и прокручивайте','ScrollZoomBlocker.CmdMessage':'Для масштаба удерживайте ⌘ и прокручивайте','TouchPanBlocker.Message':'Перемещайте карту двумя пальцами'},attributionControl:false,maxZoom:17,minZoom:8,renderWorldCopies:false,pixelRatio:Math.min(window.devicePixelRatio||1,1.5),maxBounds:[[36.9,55.3],[38.3,56.05]]});
+    const m=new lib.Map({container:container.current,style:'https://tiles.openfreemap.org/styles/positron',bounds,fitBoundsOptions:{padding:65},pitch:0,cooperativeGestures:true,locale:{'ScrollZoomBlocker.CtrlMessage':'Для масштаба удерживайте Ctrl и прокручивайте','ScrollZoomBlocker.CmdMessage':'Для масштаба удерживайте ⌘ и прокручивайте','TouchPanBlocker.Message':'Перемещайте и масштабируйте карту двумя пальцами','Map.Title':'Карта магазинов','NavigationControl.ZoomIn':'Приблизить','NavigationControl.ZoomOut':'Отдалить','AttributionControl.ToggleAttribution':'Источники карты'},attributionControl:false,maxZoom:17,minZoom:8,renderWorldCopies:false,pixelRatio:Math.min(window.devicePixelRatio||1,1.5),maxBounds:[[36.9,55.3],[38.3,56.05]]});
     map.current=m;m.addControl(new lib.AttributionControl({compact:true}),'bottom-right');
     m.scrollZoom.enable();m.dragRotate.disable();m.touchZoomRotate.enable();m.touchZoomRotate.disableRotation();
     m.once('load',()=>{
