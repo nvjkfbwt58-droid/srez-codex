@@ -83,7 +83,7 @@
   "scripts/benchmark.ts": "6a45d1cff874b45b869376aefdf0abcdf02f5aef2f3a571b95a5b208da12e5a8",
   "scripts/build-server.mjs": "63142f8c6221db8e4cbbe998247d59155b92eb7fb6d659d3322f6c008e2f487f",
   "scripts/prepare-pages.mjs": "1f4460d9c4eabad1529acdbc269606a7a1794b6c49ff9b9771542c75c989c11c",
-  ".github/workflows/pages.yml": "4b35865f66575bd2210c19807c3a3ff70cffedfd9b7265959a6da9cfb321943f",
+  ".github/workflows/pages.yml": "4ab175aa691c0b858c7b1b739ba07a153b0c6abe40a871d5c57025502b239ed1",
   "db/migrations/001-initial.sql": "187e64d8afbf41091b71b83ce6dfee919f9e7c75e47bdb5dd77db968cefb1179",
   "e2e/app.spec.ts": "fcef861e1c0f02cd9ce3b35136dcc40a75bd894390e6946d8e95f44eb75990ad",
   "src/brandVersions.ts": "c68eaf849d485f28f4d9373abbf8e584116a16a33bdd6a6ed7add2e64cac94de",
@@ -105,7 +105,7 @@
   "src/ProfileImport.tsx": "d592ab17fe97f62c2c410dc13c07d649c2029d811946a60be1ce7d7f1a014f65",
   "src/Campaigns.tsx": "5677a4b9a08ce797ddd81606a1acc48422efe8db12c93a22f05869d6c4e70fd2",
   "src/uploads.ts": "ee81a4c9c6a7282c4e04968c54cf03e393b668b479af2357445ff62603aac12d",
-  "src/retail-continuity.css": "01c4113314b0b586d8832595a9064e4a278a24894b9ee7f01d93a3afe9fb8cf9",
+  "src/retail-continuity.css": "ddfd4e4f7f9ddb6580a6f1a0c6a1e49c6fe299f9821d5353c5d7e5d566dd26ce",
   "src/DataConnections.tsx": "d7ba77f4e8d9363da0634cd3ce6123f05531e05b0b381d8d52c58ada5295d0a3",
   "src/paymentTargeting.ts": "dc9cb23590381f2cde177b33fa53effb2c07d3aeeff76fbf3d53c0efacfe599d",
   "src/brandLibrary.ts": "80eaac89b870817dc07e685ea1664144ce992876922b09250c987cdc8d045cd4",
@@ -153,7 +153,7 @@
   "src/Coupon.tsx": "386e8dde2de5bb671b8ac2f993e4064c83a632db4da7a99ec84aa19ec55aa54a",
   "src/OtherPages.tsx": "276076a4f699abf6c3ab60e67e6bcadeb3a04276ef7954bd4fe904516872e406",
   "src/useCanvasZoom.ts": "45c5254680ad229b8434f9af1c1a0e2d341c3e0875e6771ecf426592f95144c0",
-  "src/NetworkMap.tsx": "946fbb4bfdf362ce69f9898e6deb07c5ed8b232856b2d2358dfef5ecdd85aa33",
+  "src/NetworkMap.tsx": "ab0b78a16d84023715fdb053ba775fbf8ef12056889c945ded5abc8ea4b2866c",
   "src/domain.ts": "81de0c106478a0bc26c5b37c8e8fbc8621fcbf4335d50ea50b401dbea8738a35",
   "src/importer.ts": "1f510c7aac504243e6da0b713b718921cb55b5df002ad39c51b367dc73011cef",
   "src/CouponStylePicker.tsx": "653d6b35545f566cb5ba7d4902d0ba6d34109121594d8b73a59edb90cc1284fe",
@@ -172,5 +172,8 @@
   "src/mobile.css": "d7f25aeb5ff822001dd994043a56572634331a2927649d6965f87dbdd410dc93",
   "src/store.ts": "301c628423128b913e945677e0527ca6157f29ece610f9cfbbb26e69b16c2ae8",
   "src/Customers.tsx": "ec02793d94d89aea5a83e4fc7dfc5e558da566541155eb3944b6728fbbe59919",
-  "src/ui.tsx": "229b32df54ab416db3566b469b68202276d1cd207a2d180941736454fdef4992"
+  "src/ui.tsx": "229b32df54ab416db3566b469b68202276d1cd207a2d180941736454fdef4992",
+  "src/MapAverageCheck.tsx": "096f3624656588690b82e83227ccdace8fa4cf2b2a90f8190089093c962cde98",
+  "src/storeAverageCheck.ts": "d343a989809e9ac80b62aaa53f06cdc3139360e3aa1ada61170ecd97140422e9",
+  "tests/storeAverageCheck.test.ts": "bc82ae601475017534eb340e5096b3e17ee06768356e952e2e38e8e6338b26d7"
 }

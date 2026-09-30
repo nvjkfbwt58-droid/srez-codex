@@ -26,7 +26,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Test browser-hosted coupon and audience workflows
-        run: pnpm exec tsx --test tests/pages.test.ts tests/catalogLibrary.test.ts tests/audienceWorkspace.test.tsx tests/couponWorkflow.test.ts
+        run: pnpm exec tsx --test tests/storeAverageCheck.test.ts tests/networkMap.test.tsx tests/pages.test.ts tests/catalogLibrary.test.ts tests/audienceWorkspace.test.tsx tests/couponWorkflow.test.ts
       - run: pnpm run build:pages
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

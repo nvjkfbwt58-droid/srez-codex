@@ -20,3 +20,16 @@
 .srez-shell .studio-toolbar .tabs{background:#e6eadc80}.srez-shell .pm-studio .mobile-panel-tabs button.active{color:#235844}.srez-shell .campaign-stepper [aria-current=step]{background:#f5e8c6;color:#235844}.srez-shell .new-coupon-style.selected{border-color:#52764f;box-shadow:0 0 0 1px #52764f}.srez-shell .new-coupon-style.add-style{background:#f2f3e9}
 @media(max-width:768px){.srez-shell .network-home-hero h2{letter-spacing:-1.1px}.srez-shell .engagement-kpis .panel>svg:first-child{width:30px;height:30px;padding:6px}.srez-shell .page-actions>.button{background:transparent}}
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more){:root{--glass-surface:#f5f6ed;--glass-filter:none}.srez-shell .panel{background:#fffef9}.srez-shell .sidebar nav a>.nav-active{background:#f5e8c6}}
+
+/* Keep the point detail usable on short screens and touch devices. */
+.srez-shell .map-stage .map-point-card{width:320px;max-width:calc(100% - 84px);max-height:calc(100% - 100px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;bottom:36px}
+.map-average-check{margin-top:14px;padding-top:14px;border-top:1px solid #d7dfd3}
+.map-average-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}.map-average-title>span{font-size:11px;color:#235844}
+.map-average-values{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.map-average-values small{display:block;font-size:9px;color:#657366}.map-average-values strong{display:block;margin-top:4px;font-size:22px;letter-spacing:-.6px;font-variant-numeric:tabular-nums}.map-average-values>span{color:#889780}.map-average-values>div:first-child strong{color:#657366}
+.map-average-period{font-size:9px!important;color:#657366;margin-top:8px!important}.map-average-chart{color:#235844;margin-top:6px}.map-average-chart svg{display:block;width:100%;height:88px}.map-average-readout{font-size:11px;min-height:18px;color:#31543d;font-variant-numeric:tabular-nums}.map-average-slider{display:block;width:100%;height:24px;accent-color:#235844;padding:0;border:0;cursor:pointer}.map-average-note{display:block;font-size:9px;line-height:1.5;color:#657366;margin-top:5px}
+@media(max-width:768px){.srez-shell .map-stage .map-point-card{max-height:calc(100% - 76px);bottom:30px;left:10px;width:300px}.map-average-values strong{font-size:20px}}
+
+.map-average-axis{display:flex;justify-content:space-between;font-size:9px;color:#657366;gap:8px}.map-average-chart+.map-average-readout{margin-top:7px}
+
+@media(min-width:769px){.srez-shell>main{margin-left:236px;width:calc(100% - 236px)}.srez-shell .sidebar nav span,.srez-shell .sidebar .network span,.srez-shell .sidebar-bottom>button span,.srez-shell .sidebar-bottom>a span,.srez-shell .sidebar .profile>div:last-child{display:block}.srez-shell .sidebar nav a,.srez-shell .sidebar-bottom>button,.srez-shell .sidebar-bottom>a{justify-content:flex-start}}
+.map-point-stats{margin-top:10px}
