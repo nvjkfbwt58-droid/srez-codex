@@ -1,3 +1,5 @@
+import {flandersMaterials} from './flandersCatalog';
+import {brandChoice,isVisibleBrand} from './brandCatalog';
 import {get, update} from 'idb-keyval';
 import {themes, type Design} from './domain';
 import {initialProfile} from './initialBrandProfile';
@@ -11,7 +13,7 @@ export interface LocalAsset {
   id: string; brandId: string; name: string; mime: string; url: string;
   deletedAt?:string; deletedWith?:string; role: string; source: string; blob?: Blob; page?: number; parentId?: string;
 }
-interface LocalBrand {id: string; brandId: string; name: string; version: number; versions: StoredBrandVersion[]; assets: LocalAsset[]}
+interface LocalBrand {deletedAt?:string;id: string; brandId: string; name: string; version: number; versions: StoredBrandVersion[]; assets: LocalAsset[]}
 interface LocalCoupon {id: string; brandId: string; revision: number; design: Design | null}
 export interface PagesData {brands: LocalBrand[]; coupons: Record<string, LocalCoupon>}
 export interface PagesPersistence {
@@ -21,8 +23,9 @@ export interface PagesPersistence {
 export function initialPagesData(): PagesData {
   return {coupons: {}, brands: themes.map(t => {
     const paths = t.id === 'kvartal' ? [t.asset, '/assets/kvartal-air.png', '/assets/kvartal-scene.png'] : [t.asset];
-    const assets = paths.map((url, i) => ({id: `example-${t.id}-${i}`, brandId: t.id, name: `Пример · ${i + 1}`, mime: 'image/png', url, role: 'style', source: 'example'}));
-    return {id: t.id, brandId: t.id, name: t.name, version: 1, assets, versions: [{...initialProfile(t), sourceAssets: assets.map(a => a.id)}]};
+    const assets:LocalAsset[] = paths.map((url, i) => ({id: `example-${t.id}-${i}`, brandId: t.id, name: `Пример · ${i + 1}`, mime: 'image/png', url, role: 'style', source: 'example'}));
+    if(t.id==='flanders')assets.push(...flandersMaterials);
+    return {id: t.id, brandId: t.id, name: t.name, version: 1, assets, versions: [{...initialProfile(t),logoAssetId:t.id==='flanders'?'official-flanders-logo':null,sourceAssets:t.id==='flanders'?['official-flanders-logo','example-flanders-0']:assets.map(a=>a.id)}]};
   })};
 }
 const storageKey = 'srez-pages-library-v1';
@@ -40,6 +43,9 @@ const persistence: PagesPersistence = {
 };
 
 export function createPagesStore(storage: PagesPersistence) {
+  const original=storage;
+  const upgrade=(data:PagesData)=>{if(!data.brands.some(b=>b.id==='flanders'))data.brands.push(initialPagesData().brands.find(b=>b.id==='flanders')!);return data;};
+  storage={async read(){const saved=await original.read();if(saved&&!saved.brands.some(b=>b.id==='flanders')){await original.mutate(upgrade);return original.read();}return saved;},mutate:fn=>original.mutate(data=>fn(upgrade(data)))};
   const brandOf = (data: PagesData, id: string) => {
     const brand = data.brands.find(b => b.id === id);
     if (!brand) throw new Error('Сеть не найдена');
@@ -66,7 +72,14 @@ export function createPagesStore(storage: PagesPersistence) {
       if (url.startsWith('/jobs/')) return {id: url.split('/')[2], status: 'interrupted', error: {message: 'Работа требует сервера и не выполнялась в версии GitHub Pages.'}};
       const parts = url.split('/').filter(Boolean);
       if (parts[0] === 'brands') {
-        if (!parts[1]) return (await storage.read() || initialPagesData()).brands.map(({versions, assets, ...brand}) => brand);
+        if(!parts[1]&&method==='POST')return storage.mutate(data=>{
+          const input=body as {name:string;primary:string};if(!input?.name?.trim()||input.name.length>80||!/^#[0-9a-fA-F]{6}$/.test(input.primary))throw new Error('Проверьте название и цвет');
+          if(data.brands.filter(b=>b.id!=='kvartal'&&isVisibleBrand(b)).length>=30)throw new Error('Можно добавить до 30 партнёров');
+          const id='partner-'+crypto.randomUUID(),theme={id,name:input.name.trim(),primary:input.primary,ink:'#18221D',paper:'#F3F1EA',font:'Inter',asset:'/assets/brand-neutral.svg'};
+          const brand:LocalBrand={id,brandId:id,name:theme.name,version:1,versions:[{...initialProfile(theme),status:'draft'}],assets:[{id:id+'-blank',brandId:id,name:'Нейтральная композиция',mime:'image/svg+xml',url:theme.asset,role:'style',source:'example'}]};data.brands.push(brand);return {id};
+        });
+        if(!parts[1])return (await storage.read()||initialPagesData()).brands.filter(isVisibleBrand).map(b=>brandChoice(b,b.versions.find(v=>v.version===b.version)!,b.assets));
+        if(parts.length===2&&method==='DELETE'||parts[2]==='restore'&&method==='POST')return storage.mutate(data=>{const b=brandOf(data,parts[1]);if(b.id==='kvartal')throw new Error('Нельзя убрать стиль своей сети');if(method==='DELETE')b.deletedAt=new Date().toISOString();else {if(b.deletedAt&&data.brands.filter(x=>x.id!=='kvartal'&&isVisibleBrand(x)).length>=30)throw new Error('Можно добавить до 30 партнёров');delete b.deletedAt;}return {ok:true};});
         if(parts[2]==='assets'&&(parts.length===4&&method==='DELETE'||parts.length===5&&parts[4]==='restore'&&method==='POST')){
           return storage.mutate(data=>{const brand=brandOf(data,parts[1]);brand.assets=changeBrandAssets(brand.assets,parts[3],method==='POST');return{...brand,assets:brand.assets.filter(a=>!a.deletedAt),versions:brand.versions.filter(v=>!v.deletedAt),profile:brand.versions.find(v=>v.version===brand.version)};});
         }

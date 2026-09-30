@@ -92,5 +92,5 @@ test('Pages material deletion persists and restores only its own PDF pages',asyn
  assert.equal((await reopened.request('/brands/kvartal')).assets.filter((a:any)=>a.source==='browser').length,0);
  await reopened.request('/brands/kvartal/assets/pdf/restore',{});
  assert.deepEqual((await reopened.request('/brands/kvartal')).assets.filter((a:any)=>a.source==='browser').map((a:any)=>a.id),['pdf','page2']);
- assert.equal((await reopened.assets()).length,files.length+5);
+ assert.equal((await reopened.assets()).length,files.length+initialPagesData().brands.reduce((n,b)=>n+b.assets.length,0));
 });

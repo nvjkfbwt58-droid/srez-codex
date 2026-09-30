@@ -32,7 +32,7 @@ export function assistantRoute(app:Express,store:Store,provider?:AssistantProvid
    if(controller.signal.aborted)throw Object.assign(new Error('cancelled'),{name:'AbortError'});
    const s=input.snapshot;
    const query=new URLSearchParams({from:s.period.from,to:s.period.to,stores:s.stores.map(r=>r.id).join(',')});
-   const result={question:input.question,answer:reply.answer.slice(0,8000),link:reply.section==='sales'?'/sales?'+query:'/assistant',context:`${s.source} · ${s.period.from} — ${s.period.to} · ${s.network} · OpenAI ${model||''}`,provider:'openai',model};
+   const result={question:input.question,answer:reply.answer.slice(0,8000),link:reply.section==='assistant'?'/assistant':'/'+reply.section,context:`${s.source} · ${s.period.from} — ${s.period.to} · ${s.network} · OpenAI ${model||''}`,provider:'openai',model};
    store.put('assistant-request',{...record,status:'ready',result});res.json(result);
   }catch(e){const error=providerError(e);store.put('assistant-request',{...record,status:'failed',error});if(!res.destroyed)res.status(502).json({error:error.message,code:error.code});}
   finally{active--;clearTimeout(timeout);res.off('close',abort);}

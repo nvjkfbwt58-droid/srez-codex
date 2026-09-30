@@ -11,7 +11,7 @@ const locations = [
 ] as const;
 export const mapStores=stores.map((store,i)=>({...store,lng:locations[i][0],lat:locations[i][1],district:locations[i][2],area:locations[i][3]}));
 export const districts=['Все районы','Центр','Север','Восток','Юг','Запад'];
-export type MapMetric='revenue'|'count'|'growth';
+export type MapMetric='customers'|'count'|'growth';
 export const validStoreIds=(ids:readonly string[])=>stores.filter(s=>ids.includes(s.id)).map(s=>s.id);
 export function initialMapSelection(ids:readonly string[]){return ids.length?validStoreIds(ids):stores.map(s=>s.id);}
 export function selectedFilters(filters:Filters,ids:readonly string[]):Filters {
@@ -32,8 +32,8 @@ export function createStoreCampaign(ids:readonly string[],uniqueId:string):Campa
 }
 export function schematicPoint(lng:number,lat:number){return {x:8+(lng-37.30)/.59*84,y:8+(55.90-lat)/.40*80};}
 
-export function selectionTotals(rows:{id:string;revenue:number;count:number;previous:{revenue:number}}[],ids:readonly string[]){
- const included=new Set(ids);let revenue=0,count=0,previous=0;
- for(const row of rows)if(included.has(row.id)){revenue+=row.revenue;count+=row.count;previous+=row.previous.revenue;}
- return {revenue,count,average:count?Math.round(revenue/count):0,growth:growthPercent(revenue,previous)};
+export function selectionTotals(rows:{id:string;count:number;customerIds:string[];previous:{count:number}}[],ids:readonly string[]){
+ const included=new Set(ids),customers=new Set<string>();let count=0,previous=0;
+ for(const row of rows)if(included.has(row.id)){count+=row.count;previous+=row.previous.count;row.customerIds.forEach(id=>customers.add(id));}
+ return {count,customers:customers.size,growth:growthPercent(count,previous)};
 }

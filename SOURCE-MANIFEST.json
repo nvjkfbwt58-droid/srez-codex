@@ -1,477 +1,176 @@
 {
-  "version": "srez-network-map-2026-09-22",
-  "files": [
-    {
-      "path": ".env.example",
-      "sha256": "aa25ef855a4359307419814972a68b28d56057bd880981662d3d4e49c553510b"
-    },
-    {
-      "path": ".github/workflows/pages.yml",
-      "sha256": "9d5f77c16bd8d6766c16d28a6819051c2d43ad4db9f6f3b42fbaa962f9dbc8e9"
-    },
-    {
-      "path": ".gitignore",
-      "sha256": "7d3dea9a96570d00343ccc39b503659163cd594834af311af483f9e03dfa2093"
-    },
-    {
-      "path": "AI-LOCAL-CHECK.md",
-      "sha256": "7ae7fdde40c7aac6b31b4626bcebea23379c9ebf6eb22f096c38f8e777f1c9f3"
-    },
-    {
-      "path": "AUDIT-HANDOFF.md",
-      "sha256": "8830043e0d0235557fbc71e6eba7121c1b063d2331e62637c069eabc420f4514"
-    },
-    {
-      "path": "CLAUDE-HANDOFF.md",
-      "sha256": "55998dc2924b69c5bdc1253812cc9b3f5efd079be9b99575f4d589ccb32fb322"
-    },
-    {
-      "path": "GITHUB-PAGES.md",
-      "sha256": "7d05fc4f1b2d33d63ae6ea50ef1b4b298afa0882c9e8a8c951b55fb9c199e828"
-    },
-    {
-      "path": "IMPLEMENTATION-REPORT.md",
-      "sha256": "8fb9e6226f99a3b2bf1b9c61b69c8332c1138f95e21fb93361e13a1d9b48e589"
-    },
-    {
-      "path": "METHODOLOGY.md",
-      "sha256": "089f9c1e371068bf286c79b703e78254ee508a4eebe201b18cfc9498b4c1d444"
-    },
-    {
-      "path": "NETWORK-MAP-UPDATE.md",
-      "sha256": "cb0bcd705a2b8b5feb8bc7ddee8427939edb2aa5d07823ebb819d7625b3cc0ec"
-    },
-    {
-      "path": "PERFORMANCE.md",
-      "sha256": "6ce9e3180386238265306374b4362b1ce8b49142b5324988fe10fd8329cef45f"
-    },
-    {
-      "path": "PLAN.md",
-      "sha256": "9fe12a9854295267a03406c64217a8136cc42159be0355ef8fc39b411d5f287f"
-    },
-    {
-      "path": "README.md",
-      "sha256": "f8dc11acf6aad08e45e2aaadd63b84f72368675e6230aae6b71d7f9d83fb0c22"
-    },
-    {
-      "path": "benchmarks/after.json",
-      "sha256": "274509c9217991f9872107292dbc8b047420517ca6c805cedd657ecbb3d6d334"
-    },
-    {
-      "path": "benchmarks/before.json",
-      "sha256": "a79cbab2941f37e242c4126a68f52234ca1dc12aa48ac1c3c2e79eb43bdbd179"
-    },
-    {
-      "path": "db/migrations/001-initial.sql",
-      "sha256": "187e64d8afbf41091b71b83ce6dfee919f9e7c75e47bdb5dd77db968cefb1179"
-    },
-    {
-      "path": "e2e/app.spec.ts",
-      "sha256": "fcef861e1c0f02cd9ce3b35136dcc40a75bd894390e6946d8e95f44eb75990ad"
-    },
-    {
-      "path": "index.html",
-      "sha256": "b036a6dc697d307d3eca8ae89a4c1f6875c3fc586eff8a075fd50bd8eaa31092"
-    },
-    {
-      "path": "package.json",
-      "sha256": "37b9b0593c9ccb5c0087a99433f840ecd55a483f9607fa18c536ea913c20b163"
-    },
-    {
-      "path": "playwright.config.ts",
-      "sha256": "dc492872da6d8f33fba3f4b69b8a579075b8dc6da285b00f02adf10896bd67e4"
-    },
-    {
-      "path": "pnpm-lock.yaml",
-      "sha256": "708f2ce70dc096ab3ee170237f4f4e085392d9a71ba275532eadfa85642762d1"
-    },
-    {
-      "path": "pnpm-workspace.yaml",
-      "sha256": "693cf7cefcb2fae7867632d77a78dc3d245b303e0009e37e8935ab838317e649"
-    },
-    {
-      "path": "public/assets/copper.png",
-      "sha256": "56bdf6fde27701e93d8dd8a463c1884ef62cde2d31805d714d2aa133560cc42a"
-    },
-    {
-      "path": "public/assets/copper.webp",
-      "sha256": "c0f61f313776c332f2e96b3b331106f4c071f90a5e5f95ecf8dda8f2a583859c"
-    },
-    {
-      "path": "public/assets/kvartal-air.png",
-      "sha256": "43a65d29909e57a61fbefbee756823c4db8f972cf68c7890fa46d3bc07ef262e"
-    },
-    {
-      "path": "public/assets/kvartal-air.webp",
-      "sha256": "553ca216093e09e4906e1a0fb8ab8ce8105c00e4f3d0bf244d918d905962399a"
-    },
-    {
-      "path": "public/assets/kvartal-right.png",
-      "sha256": "6c3e640790dd523caf1e703e53f57763800858fbbdce839028ffc3fba2a1668a"
-    },
-    {
-      "path": "public/assets/kvartal-right.webp",
-      "sha256": "320d22a05319a7dde11dbed11946319214e779473afa34fb084766ffda4cb5bb"
-    },
-    {
-      "path": "public/assets/kvartal-scene.png",
-      "sha256": "565336b208e6674198865ccf6a1b163fa8508175bcec139510ebcdab46d99ed0"
-    },
-    {
-      "path": "public/assets/kvartal-scene.webp",
-      "sha256": "c44e6cbed690bce1ac62075c799de638e572d6c50934ab5b6d3268f9859f5215"
-    },
-    {
-      "path": "public/assets/lemon.png",
-      "sha256": "91d758a1e4aac8a89debafaa382d1dfec2307861d16133695ec9da7e5d446c7f"
-    },
-    {
-      "path": "public/assets/lemon.webp",
-      "sha256": "7c0fffce657da9766da39acf6bfe67425fa928785c2942fe73cb4c292b98f4e4"
-    },
-    {
-      "path": "public/assets/provenance.json",
-      "sha256": "0581f07f049b51c253e832a9cc5f9f0f4678be78710bff0fa939a5d6af072181"
-    },
-    {
-      "path": "public/favicon.svg",
-      "sha256": "58ebccaa3d77bf267b633bf3cd372efd93d3aacc1b24bf3cc0beb7d639db9a26"
-    },
-    {
-      "path": "screenshots/README.md",
-      "sha256": "cf1fb72602b3a8e88794bf70031ac0ebe9568081b5d91da1e32489019153f580"
-    },
-    {
-      "path": "scripts/ai-smoke.ts",
-      "sha256": "219f819847914fdb9778758a659105e1e057c92cad223742f6f9186187b47615"
-    },
-    {
-      "path": "scripts/audit-seed.ts",
-      "sha256": "e8a334564b268daade075d55e2f512975489b22acf1be354efee1de460645658"
-    },
-    {
-      "path": "scripts/benchmark.ts",
-      "sha256": "6a45d1cff874b45b869376aefdf0abcdf02f5aef2f3a571b95a5b208da12e5a8"
-    },
-    {
-      "path": "scripts/build-server.mjs",
-      "sha256": "63142f8c6221db8e4cbbe998247d59155b92eb7fb6d659d3322f6c008e2f487f"
-    },
-    {
-      "path": "scripts/optimize-assets.mjs",
-      "sha256": "57bf51e21c3105b0b9b10fc2a1406c92445643f73a06d5b0884d31ad76070eca"
-    },
-    {
-      "path": "scripts/prepare-pages.mjs",
-      "sha256": "1f4460d9c4eabad1529acdbc269606a7a1794b6c49ff9b9771542c75c989c11c"
-    },
-    {
-      "path": "server/ai-budget.ts",
-      "sha256": "da95a950081fcd2a2aa3ade3b750904c0fd8cbd1975a768115d3ec7466f6186a"
-    },
-    {
-      "path": "server/app.ts",
-      "sha256": "a82f8a8a7ffe7e64c1de0791948beb60d7cefa484199c712aad547c3f43221d2"
-    },
-    {
-      "path": "server/assistant-route.ts",
-      "sha256": "58a5854260d3e1c319f1bed87155b6ca7efb08971a48c3990d007bdb4d6a1baa"
-    },
-    {
-      "path": "server/index.ts",
-      "sha256": "792a5376366732df0edbae654f8a969b2ebb4653ea066dece46fbf9d75fe0041"
-    },
-    {
-      "path": "server/providers.ts",
-      "sha256": "95ac13ace950eecd3355fb01daf1b5eedc6b032bc34cc505573e3eef899ee314"
-    },
-    {
-      "path": "server/store.ts",
-      "sha256": "3efd4377885431bd9837746977d973ab9f3df58e708d34609df08cd477520903"
-    },
-    {
-      "path": "src/App.tsx",
-      "sha256": "c1cd3eed82de6b6d14250b8f38c50612671be099076aede1f39decb922b0d694"
-    },
-    {
-      "path": "src/Brand.tsx",
-      "sha256": "f9526b33d0539220146ef290ac46a14d2a983eea1c0bf46f3eb649b87f10be0c"
-    },
-    {
-      "path": "src/CampaignLaunch.tsx",
-      "sha256": "1bf5c47ba2aafdb85cfa351d98085cfc2968a46d9d5278a2fc81c195d560e11e"
-    },
-    {
-      "path": "src/CampaignSteps.tsx",
-      "sha256": "e4bf4ad1d99fe549ad0354e0cbca0cbf173853554f8ca43d9d09e9a716413109"
-    },
-    {
-      "path": "src/Campaigns.tsx",
-      "sha256": "a69f8729bdbdfcc309f2fc379dff3ce4d59f74d524c509503057a66aca19647d"
-    },
-    {
-      "path": "src/ChartPeriodControls.tsx",
-      "sha256": "d6cb76a8dbae74b30f8797e022833ecd91ed3db9f4dfaf733b0eb26d54e91b9d"
-    },
-    {
-      "path": "src/Coupon.tsx",
-      "sha256": "b40be7cfde8a938844d9a54c833b8f910816b7f2ead52b4c84b92d19e798b470"
-    },
-    {
-      "path": "src/CouponTextEditor.tsx",
-      "sha256": "62df39358a6b10a33d8bb84639038cfc7d7d4cf1c613f8f1fb22d7d1ba8c2776"
-    },
-    {
-      "path": "src/Customers.tsx",
-      "sha256": "d79a5991b9bb8d26aa615ba13d4e91ab0a4d9021ce8bf7182729115cb38a2fd2"
-    },
-    {
-      "path": "src/DataConnections.tsx",
-      "sha256": "bda2e6b15eb34bf388afd674fda5766d783c1faa73cce17459a56c193034bbeb"
-    },
-    {
-      "path": "src/DataTable.tsx",
-      "sha256": "143e003172d3f4fa127235edd2670b2d34b55e3c32ddc543564b8ddb3667202a"
-    },
-    {
-      "path": "src/GlassAtmosphere.tsx",
-      "sha256": "bb804d442c6c77268925b32e505930d341cb0bb772681f1992c031e3138e9b9a"
-    },
-    {
-      "path": "src/MapSchematic.tsx",
-      "sha256": "fcf56821ee96e5a16098ea7146643e5cdedea9f3cd3c256ab72c24030c1cc11c"
-    },
-    {
-      "path": "src/Motion.tsx",
-      "sha256": "c7c04bcb0021c6c4df89ef2bc2adfaa6731c5e52916d3a9e7b6134683fcf5cf4"
-    },
-    {
-      "path": "src/NetworkAssistant.tsx",
-      "sha256": "b10b3e426ec0380f1c11e34b79229077b0c0c43e0a0bb4f30251bce6f435c8a7"
-    },
-    {
-      "path": "src/NetworkMap.tsx",
-      "sha256": "f89e1c49b23818205f7b8e6b91be0f0167fa3ab30cd594d0bbda422f8a5db718"
-    },
-    {
-      "path": "src/NetworkMapCanvas.tsx",
-      "sha256": "1a12b19288c68df941667326e58ae3c60ec28b12ea45ac29707f177e9ce7cdac"
-    },
-    {
-      "path": "src/NetworkMapTeaser.tsx",
-      "sha256": "3657b78552b8ad6ebee6021ab65ec6ac1b10d5db8575dca5fe6d7288c7706767"
-    },
-    {
-      "path": "src/OtherPages.tsx",
-      "sha256": "276076a4f699abf6c3ab60e67e6bcadeb3a04276ef7954bd4fe904516872e406"
-    },
-    {
-      "path": "src/Overview.tsx",
-      "sha256": "b77a77874de51b95e3c3ea8c8ee13436144e0ec9af28bca791ced8f803e05e1b"
-    },
-    {
-      "path": "src/Performance.tsx",
-      "sha256": "fc8fe7babc20017c1e518cf318738d60dd2da32191c6784c3d692cd299fe1bf8"
-    },
-    {
-      "path": "src/SalesChart.tsx",
-      "sha256": "03096c53cd2cf0ceac9d02c1f421b76e9d0b84605b8f44a6ee83092511dbe160"
-    },
-    {
-      "path": "src/ScenarioGuide.tsx",
-      "sha256": "a0f620b909bcfa3415acb18304774d4b75f9696a6612796ed19de9279ca9c814"
-    },
-    {
-      "path": "src/StoreExpenses.tsx",
-      "sha256": "163e46510e04e7a991fd2910740baee7021a32b2149f1dd7a2c68f4494a00afe"
-    },
-    {
-      "path": "src/Studio.tsx",
-      "sha256": "3bc8e010264e7db71eddb86b1dcc27bd4187110e2af9877ef7b492a2426f4a07"
-    },
-    {
-      "path": "src/assistant.css",
-      "sha256": "37bce39af9e9dfad2e41d4b524254f643958e4b061f9895e4ad82904c7299213"
-    },
-    {
-      "path": "src/assistant.ts",
-      "sha256": "454d2a5aaf0156d51040ae20a4af6da4a926aa3fbda2463e41289d73ef5f4c99"
-    },
-    {
-      "path": "src/assistantContext.ts",
-      "sha256": "ab77810cbf115231aed9b207e737d2063d506b3780fb213bc13682d2c778812b"
-    },
-    {
-      "path": "src/brandAssets.ts",
-      "sha256": "a8c25f3e6fa7c4fdf445dcfe0bdc0637d79547669f2247d6a4a5e4b335526f02"
-    },
-    {
-      "path": "src/brandSchema.ts",
-      "sha256": "b8303254cf9e0e99117e72f91c8415ef33e54f645dfe5ecc2708590cf37629b7"
-    },
-    {
-      "path": "src/brandVersions.ts",
-      "sha256": "c68eaf849d485f28f4d9373abbf8e584116a16a33bdd6a6ed7add2e64cac94de"
-    },
-    {
-      "path": "src/calendar.css",
-      "sha256": "5561e3277c80e34d6ef94499c41f399315a050289b03eb119f8a9dce2fde344b"
-    },
-    {
-      "path": "src/campaignFlow.ts",
-      "sha256": "d15e420c23e02081cbe1ee95c9ff924c11d839a40489ee27edd3e7e746b5f6db"
-    },
-    {
-      "path": "src/chartGeometry.ts",
-      "sha256": "3341309ca80f0b8f91fe0d3406425452128dc6b812d59c107c496738d30b4e29"
-    },
-    {
-      "path": "src/chartPeriods.ts",
-      "sha256": "f0a1bfc4953d5ddcf1f82a1da8fc8124cb03a3b8ec713dd551de8082ab88ba25"
-    },
-    {
-      "path": "src/designSchema.ts",
-      "sha256": "cb779ddbf15bd41b79f9d9c30cb7e6ff31d2c61df13f04e4fc7958de5f49086e"
-    },
-    {
-      "path": "src/domain.ts",
-      "sha256": "fe164eb0c4ad6d8728e78d0020c387a410adf0fc08e9231707a8b16d10e47b7f"
-    },
-    {
-      "path": "src/expenses.ts",
-      "sha256": "10fa9f432abfbbd5b237d5c9b99b7ccadba589aa3297fa779fe3cac01501e240"
-    },
-    {
-      "path": "src/importer.ts",
-      "sha256": "4c41621ff6a8e90b277c06c1271988649ee53f7ec26e944429e370cf7d1ab3f8"
-    },
-    {
-      "path": "src/initialBrandProfile.ts",
-      "sha256": "74eaeede1b5700c0d67cd968fc819315ec16f2298dac52123adcef23df4eadb9"
-    },
-    {
-      "path": "src/main.tsx",
-      "sha256": "5d46008d9f866df0d6af70ac41a0d365e977df165b863d37935f398a519d857c"
-    },
-    {
-      "path": "src/mobile.css",
-      "sha256": "d7f25aeb5ff822001dd994043a56572634331a2927649d6965f87dbdd410dc93"
-    },
-    {
-      "path": "src/motion.css",
-      "sha256": "628f7b19cae82d791e3bd0304c322f5bb5c7fb04fb264ff8cb7e4a22e929ed4f"
-    },
-    {
-      "path": "src/network-map.css",
-      "sha256": "41296c233daef9e1398215c7732b3f396bf05c46b9bdbf7fd4ce2fa22146f844"
-    },
-    {
-      "path": "src/networkMapData.ts",
-      "sha256": "eeff9acf4d496accb2ed755bda047dbf3e8b1de6b38a9b62169b2df7ad4f599c"
-    },
-    {
-      "path": "src/pagesStore.ts",
-      "sha256": "2ae91393951ecf82b6d40c0e7427d588809ff24d636b97b21b42322dfee3cf2f"
-    },
-    {
-      "path": "src/pagesUploads.ts",
-      "sha256": "0ea2b7828a57277909eb77ae5ed9261f61b222da205266258720b8d6958429bb"
-    },
-    {
-      "path": "src/persistence.ts",
-      "sha256": "8e54a83f939f1a87e353f9d2d579c7f63fa06a8620e3dc69693bd9e7612bf620"
-    },
-    {
-      "path": "src/runtime.ts",
-      "sha256": "572c030dffd8d1f0c16d091256f00747b1b5b43d6963d876f2b7dff012875fa5"
-    },
-    {
-      "path": "src/seed.worker.ts",
-      "sha256": "fc87f926fb7219ff39e692943bcdcba2535682ddbce187d15a244f9fadecc458"
-    },
-    {
-      "path": "src/store.ts",
-      "sha256": "88be9411260ceab799d9ebec502789d3d79d9e48ac014bd6ab124956ea956758"
-    },
-    {
-      "path": "src/studioTextEdits.ts",
-      "sha256": "9b9861b891026207121f39426c68da60de6f9a62f6f2c8eebb9315b1457483b3"
-    },
-    {
-      "path": "src/styles.css",
-      "sha256": "9edacad304c2bb6a5a2df66e947beac88674ce0c2972e16d6e5c4c4f42f683d0"
-    },
-    {
-      "path": "src/ui.tsx",
-      "sha256": "229b32df54ab416db3566b469b68202276d1cd207a2d180941736454fdef4992"
-    },
-    {
-      "path": "src/uploads.ts",
-      "sha256": "ee81a4c9c6a7282c4e04968c54cf03e393b668b479af2357445ff62603aac12d"
-    },
-    {
-      "path": "src/webmcp.ts",
-      "sha256": "d99e606d4baefdcc838a3f57c1ed2d748f3539813b7e205da31df0f3f1e4174d"
-    },
-    {
-      "path": "src/workflow.css",
-      "sha256": "12b95cb10d1c864e063cb45d7cb16642014439f50ed177946e5f29438166ae6c"
-    },
-    {
-      "path": "tests/ai.test.ts",
-      "sha256": "fae7c34b4e707d9d2a72daefff0e1e1fc3bcdcef563ba97885a87a3a6c01b96f"
-    },
-    {
-      "path": "tests/chart.test.ts",
-      "sha256": "abe4daab452f6711a2f8b1f72e6da654c4642d70d97480a9873ac3713f407881"
-    },
-    {
-      "path": "tests/domain.test.ts",
-      "sha256": "f355ff6a1c6d9af03a5ba47a918f11d1e0d8b3ec5326700bc52529e55112dd86"
-    },
-    {
-      "path": "tests/expenses.test.ts",
-      "sha256": "cbcd157889e8ada28b19890ee56726a390800763825b2a653cbb4ce38830aa21"
-    },
-    {
-      "path": "tests/networkMap.test.tsx",
-      "sha256": "7dc5bb6c3b295887f76c0d5c680bf7a4961f410027ce4bf1dce2e5c448c67681"
-    },
-    {
-      "path": "tests/pages.test.ts",
-      "sha256": "d7ba101dd9308532071a0a04db2fbc5cd68f4de8eabe22a7e13dd2edcc3ca089"
-    },
-    {
-      "path": "tests/pdf.test.ts",
-      "sha256": "8cef985c4f4284802c0d77a80bcc6b87313c28e2859d4b200c660bf1305ea963"
-    },
-    {
-      "path": "tests/performance.test.ts",
-      "sha256": "1857785ee41c2d1b3fd135f5cb3550946946604a77895802434649d9e2671be2"
-    },
-    {
-      "path": "tests/render.test.tsx",
-      "sha256": "365c3c5767a594c37f487ce6eaec0d7ef8a53fc5ecf5ea4f5c5c1e513a68db8f"
-    },
-    {
-      "path": "tests/server.test.ts",
-      "sha256": "4c62d3c759e5b7e6dbfc2ed1c78a675ed56b151279edbde7c4ce926130031a02"
-    },
-    {
-      "path": "tsconfig.json",
-      "sha256": "76c50011eecaac80f6b8f73e3afaf40554e1b65ba1a364b0dcad8c1e8f3d1e21"
-    },
-    {
-      "path": "vite.config.ts",
-      "sha256": "0e4749c511f9dd17e262b443b075f10d9c0e10ebd65c7ed52b2e41692ee080a7"
-    }
-  ],
-  "excluded": [
-    ".env",
-    "storage",
-    "node_modules",
-    "dist",
-    "dist-server",
-    ".vite"
-  ]
+  "pnpm-lock.yaml": "708f2ce70dc096ab3ee170237f4f4e085392d9a71ba275532eadfa85642762d1",
+  "index.html": "b036a6dc697d307d3eca8ae89a4c1f6875c3fc586eff8a075fd50bd8eaa31092",
+  "IMPLEMENTATION-REPORT.md": "8fb9e6226f99a3b2bf1b9c61b69c8332c1138f95e21fb93361e13a1d9b48e589",
+  "START-HERE.md": "218f3fe05762be8c00c297f02a1f9ea3857db31f885e4fd8da5eb06f193f08e6",
+  "GITHUB-PAGES.md": "7d05fc4f1b2d33d63ae6ea50ef1b4b298afa0882c9e8a8c951b55fb9c199e828",
+  "AUDIT-HANDOFF.md": "8830043e0d0235557fbc71e6eba7121c1b063d2331e62637c069eabc420f4514",
+  "METHODOLOGY.md": "089f9c1e371068bf286c79b703e78254ee508a4eebe201b18cfc9498b4c1d444",
+  "CLAUDE-HANDOFF.md": "887ba373cab1f6818314c1694689f0d4baf6bfdf8d991ca3ab88457b1fc85317",
+  "PERFORMANCE.md": "6ce9e3180386238265306374b4362b1ce8b49142b5324988fe10fd8329cef45f",
+  "README.md": "f8dc11acf6aad08e45e2aaadd63b84f72368675e6230aae6b71d7f9d83fb0c22",
+  "AUDIENCE-WORKSPACE-UPDATE.md": "2169d34be39826c0937bbbf5bc8b586b424e9a20f52ca409974f2dd182a7cae8",
+  "AI-LOCAL-CHECK.md": "7ae7fdde40c7aac6b31b4626bcebea23379c9ebf6eb22f096c38f8e777f1c9f3",
+  ".gitignore": "7d3dea9a96570d00343ccc39b503659163cd594834af311af483f9e03dfa2093",
+  "package.json": "37b9b0593c9ccb5c0087a99433f840ecd55a483f9607fa18c536ea913c20b163",
+  "NETWORK-MAP-UPDATE.md": "cb0bcd705a2b8b5feb8bc7ddee8427939edb2aa5d07823ebb819d7625b3cc0ec",
+  "PLAN.md": "9fe12a9854295267a03406c64217a8136cc42159be0355ef8fc39b411d5f287f",
+  "tsconfig.json": "76c50011eecaac80f6b8f73e3afaf40554e1b65ba1a364b0dcad8c1e8f3d1e21",
+  "playwright.config.ts": "dc492872da6d8f33fba3f4b69b8a579075b8dc6da285b00f02adf10896bd67e4",
+  ".env.example": "aa25ef855a4359307419814972a68b28d56057bd880981662d3d4e49c553510b",
+  "vite.config.ts": "0e4749c511f9dd17e262b443b075f10d9c0e10ebd65c7ed52b2e41692ee080a7",
+  "pnpm-workspace.yaml": "693cf7cefcb2fae7867632d77a78dc3d245b303e0009e37e8935ab838317e649",
+  "screenshots/README.md": "cf1fb72602b3a8e88794bf70031ac0ebe9568081b5d91da1e32489019153f580",
+  "tests/chart.test.ts": "abe4daab452f6711a2f8b1f72e6da654c4642d70d97480a9873ac3713f407881",
+  "tests/couponWorkflow.test.ts": "27ba8ad06f7149afd57c412466f944037c826f4d04ffef39da22f4c5e02cdbba",
+  "tests/audienceWorkspace.test.tsx": "3a40acbd5c6b024bcb4644386028ca7dff02e5d0d9782f801167e3f215032d4d",
+  "tests/domain.test.ts": "f355ff6a1c6d9af03a5ba47a918f11d1e0d8b3ec5326700bc52529e55112dd86",
+  "tests/render.test.tsx": "95624f3c6f2d1b6d241630d1af8209db65913319c3fd61a4a12e6a49ce9f8bda",
+  "tests/expenses.test.ts": "4fd4c97ce89633caefa67c7bd0ab55fcd79598dfdecea0dbd56f9221e73281e0",
+  "tests/pages.test.ts": "d6e01f61d0a48d17ce8aa5fed0396214d55c3949207c22fd27d31134e2e4b34e",
+  "tests/partnerCatalog.test.ts": "0a40c1b3ba21f68731a112d376f4b195a7bbfe20ee9f3f4ba83653ddcbf09506",
+  "tests/performance.test.ts": "1857785ee41c2d1b3fd135f5cb3550946946604a77895802434649d9e2671be2",
+  "tests/catalogLibrary.test.ts": "6a41fe4f7c229bd9f5f4d8a9a3ac721333a1d9a2b62722f32821a50b7332e460",
+  "tests/networkMap.test.tsx": "f3ac628bee151cee578ce37907bc7eae8cb73cc72bc66f72d638620e3ab8da42",
+  "tests/pdf.test.ts": "8cef985c4f4284802c0d77a80bcc6b87313c28e2859d4b200c660bf1305ea963",
+  "tests/server.test.ts": "3c54618c21c59685c9d59f61f11f6d1e677db1a689bedff428ede789d9b29075",
+  "tests/ai.test.ts": "f0ce47a94dee50f858056febcee967d10a2c98d6589cc2ecdf0f0164ed16dfe4",
+  "server/ai-budget.ts": "da95a950081fcd2a2aa3ade3b750904c0fd8cbd1975a768115d3ec7466f6186a",
+  "server/app.ts": "88ddffb596756596ffdce50b35f13bf16b80d52de75f068dc11f39e05b6d9b48",
+  "server/providers.ts": "039ec9e28ad4fd907e1e7622adbb53cf37ff107d952c1d3cf03394a1ac985912",
+  "server/assistant-route.ts": "438d331a98293d1d45eac02869697f960a164e7722e2a4ac6851047142c7ce05",
+  "server/index.ts": "792a5376366732df0edbae654f8a969b2ebb4653ea066dece46fbf9d75fe0041",
+  "server/store.ts": "3efd4377885431bd9837746977d973ab9f3df58e708d34609df08cd477520903",
+  "public/favicon.svg": "58ebccaa3d77bf267b633bf3cd372efd93d3aacc1b24bf3cc0beb7d639db9a26",
+  "public/brand/flanders-logo.webp": "5cbeb43b954b2fd818dee5ca3d9cf6761945dd7e8cc2ac2af52bb610f054f9c5",
+  "public/brand/flanders-prata-cyr.woff2": "a334ddd4e1590fa350148f5b415af21b062db55519ba7b5098aac217ad9badf8",
+  "public/brand/flanders-prata-latin.woff2": "8585ed0b108281be14a427c955622449d5d422d0941fc9510cd4e755df771630",
+  "public/brand/flanders/poster-chyorniy-russki-1500.webp": "481287533f4cf67a122762f0177ce8a9b0252c29f9809649c85182474fa8c2a3",
+  "public/brand/flanders/medal-shokoladny-lager-480.webp": "def42cf8fcc85a0e1bb2b17d7fc729a54c875339b7d11399d0bdb2f87f84b8a6",
+  "public/brand/flanders/medal-brazilian-lager-480.webp": "2a8fa539dd66447aa660db334aea26c6fce1e2a3c59c3cc91f5c086266449c08",
+  "public/brand/flanders/poster-martiniano-bianco-1500.webp": "d0d228e788c9704b610c91f10f9e1fb0dd224163056bf49cc42677324b5b58af",
+  "public/brand/flanders/medal-flanders-helles-480.webp": "bc95320c81fb36c6a1709f377ce37ee17024adfa742a067056bb93f939a09ebe",
+  "public/brand/flanders/poster-cola-limon-1500.webp": "ca481eac2e76e8586aa3163e9226a87443d798bb67d05fd93bc099c0e1787b9e",
+  "public/brand/flanders/medal-american-pale-ale-480.webp": "b989660a6109f1806cadd291d9fe1cb2ef21f3ad2ef7f4f553a21802708a5b76",
+  "public/brand/flanders/medal-flanders-blanche-480.webp": "41a0b8ecf2a174f231ed4cfe1d6e13ea05695758b9401a78c08c82b3d7cc0c97",
+  "public/brand/flanders/poster-vishnevy-plombir-1500.webp": "18d76dba103ccafa072d6ba7ab54a1f604b1bd9bde720fcf53b2f98a5caae368",
+  "public/brand/flanders/poster-mednogorskoe-1500.webp": "4c3ffee4fb85e6c63233e11d53b91cc0b399b5234b2de98ad2ebf6fb5d091e0c",
+  "public/brand/flanders/poster-shamansky-el-1500.webp": "f437a8aa539801081f97b3f514e32b68c6c92bd00cb75270ab676d651343c186",
+  "public/brand/flanders/medal-flanders-lager-gold-480.webp": "8b605d095e3a9e2aaceb73c7dd180cc33002fab19e68e9065b06760fb3048a28",
+  "public/brand/flanders/medal-zlata-praha-480.webp": "a80cae4185449eda33f0ebc7657d694488245876e08be6ad93b7de315e4af44e",
+  "public/brand/flanders/poster-brat-granat-1500.webp": "7756d25d5aefd9d25aabb0363e1a69625ed8eecbf5a5b5af2bf86bdef3c19340",
+  "public/brand/flanders/poster-zoloto-ermaka-1500.webp": "92dc638ae396a636694aea13ee711a25de2e3897b458f35893ad5c561492d93c",
+  "public/brand/flanders/medal-ivan-goz-480.webp": "a42e0427659f42cda89e141d77087070a903ec00af94e83aad1f14dded6fc868",
+  "public/assets/flanders-template.svg": "c5bf50e7c4c7bb39ef0eb79bb0067abf94454515fbf2de0da660e577afb22ba1",
+  "public/assets/copper.webp": "c0f61f313776c332f2e96b3b331106f4c071f90a5e5f95ecf8dda8f2a583859c",
+  "public/assets/kvartal-right.webp": "320d22a05319a7dde11dbed11946319214e779473afa34fb084766ffda4cb5bb",
+  "public/assets/provenance.json": "0581f07f049b51c253e832a9cc5f9f0f4678be78710bff0fa939a5d6af072181",
+  "public/assets/lemon.webp": "7c0fffce657da9766da39acf6bfe67425fa928785c2942fe73cb4c292b98f4e4",
+  "public/assets/kvartal-right.png": "6c3e640790dd523caf1e703e53f57763800858fbbdce839028ffc3fba2a1668a",
+  "public/assets/kvartal-scene.png": "565336b208e6674198865ccf6a1b163fa8508175bcec139510ebcdab46d99ed0",
+  "public/assets/kvartal-air.webp": "553ca216093e09e4906e1a0fb8ab8ce8105c00e4f3d0bf244d918d905962399a",
+  "public/assets/copper.png": "56bdf6fde27701e93d8dd8a463c1884ef62cde2d31805d714d2aa133560cc42a",
+  "public/assets/kvartal-air.png": "43a65d29909e57a61fbefbee756823c4db8f972cf68c7890fa46d3bc07ef262e",
+  "public/assets/lemon.png": "91d758a1e4aac8a89debafaa382d1dfec2307861d16133695ec9da7e5d446c7f",
+  "public/assets/flanders.png": "885197dc08ade720ebad79dab9cbb6dc97e0c5a7a0540bbf479ff9d5081bf0ed",
+  "public/assets/kvartal-scene.webp": "c44e6cbed690bce1ac62075c799de638e572d6c50934ab5b6d3268f9859f5215",
+  "public/assets/brand-neutral.svg": "757920aa6cff8067459bf29423b21e6a8c95452ee5669f24d1714d45ed028924",
+  "benchmarks/before.json": "a79cbab2941f37e242c4126a68f52234ca1dc12aa48ac1c3c2e79eb43bdbd179",
+  "benchmarks/after.json": "274509c9217991f9872107292dbc8b047420517ca6c805cedd657ecbb3d6d334",
+  "scripts/optimize-assets.mjs": "57bf51e21c3105b0b9b10fc2a1406c92445643f73a06d5b0884d31ad76070eca",
+  "scripts/ai-smoke.ts": "219f819847914fdb9778758a659105e1e057c92cad223742f6f9186187b47615",
+  "scripts/audit-seed.ts": "e8a334564b268daade075d55e2f512975489b22acf1be354efee1de460645658",
+  "scripts/benchmark.ts": "6a45d1cff874b45b869376aefdf0abcdf02f5aef2f3a571b95a5b208da12e5a8",
+  "scripts/build-server.mjs": "63142f8c6221db8e4cbbe998247d59155b92eb7fb6d659d3322f6c008e2f487f",
+  "scripts/prepare-pages.mjs": "1f4460d9c4eabad1529acdbc269606a7a1794b6c49ff9b9771542c75c989c11c",
+  ".github/workflows/pages.yml": "9d5f77c16bd8d6766c16d28a6819051c2d43ad4db9f6f3b42fbaa962f9dbc8e9",
+  "db/migrations/001-initial.sql": "187e64d8afbf41091b71b83ce6dfee919f9e7c75e47bdb5dd77db968cefb1179",
+  "e2e/app.spec.ts": "fcef861e1c0f02cd9ce3b35136dcc40a75bd894390e6946d8e95f44eb75990ad",
+  "src/brandVersions.ts": "c68eaf849d485f28f4d9373abbf8e584116a16a33bdd6a6ed7add2e64cac94de",
+  "src/NetworkAssistant.tsx": "c4754c38bb6e1703f60476f46afb66de43d631e1b3ce89e6891dc712a1537549",
+  "src/partnerCatalog.ts": "cc6c41857536882f84a7dd8e72d9fcaffed03ad73a7216a70f067ac5bc9da694",
+  "src/partners.css": "cec5b77db4443f54dc704c35bab7cd23cf1b8bb87bca25b94324f5777affe143",
+  "src/brandSchema.ts": "b8303254cf9e0e99117e72f91c8415ef33e54f645dfe5ecc2708590cf37629b7",
+  "src/engagement.ts": "d0f0e825c68a670f57c65567b3e04564c1392feaf47338110f3b3141e9ef500c",
+  "src/App.tsx": "a6ea693e02c44f8b343949feb57b56f9e5071da7d61940171e101c45d2284ca7",
+  "src/main.tsx": "28c87ddf241a1839525ceb136667af259cd200e43630424f026c8420455cff28",
+  "src/StoreExpenses.tsx": "163e46510e04e7a991fd2910740baee7021a32b2149f1dd7a2c68f4494a00afe",
+  "src/initialBrandProfile.ts": "3a9eeca22da5d854806cb5f6f5551cc618977a1706123da8cda4bbc7aed27798",
+  "src/seed.worker.ts": "fc87f926fb7219ff39e692943bcdcba2535682ddbce187d15a244f9fadecc458",
+  "src/assistant.css": "37bce39af9e9dfad2e41d4b524254f643958e4b061f9895e4ad82904c7299213",
+  "src/canvasZoom.ts": "f5a3ca1aa6263da059513dd2cce60d45e520ea6a9fec10e256f8470bd14beef5",
+  "src/ScenarioGuide.tsx": "c051f1d7ae1ef22edb112d9e2c4c279187ccdeefa4530a58b011db50823b4a81",
+  "src/styles.css": "9edacad304c2bb6a5a2df66e947beac88674ce0c2972e16d6e5c4c4f42f683d0",
+  "src/liquid-glass.css": "04be25950c98bcc598590856e886b13a990f75334e919a9f73548aab1c6a2a33",
+  "src/ProfileImport.tsx": "d592ab17fe97f62c2c410dc13c07d649c2029d811946a60be1ce7d7f1a014f65",
+  "src/Campaigns.tsx": "5677a4b9a08ce797ddd81606a1acc48422efe8db12c93a22f05869d6c4e70fd2",
+  "src/uploads.ts": "ee81a4c9c6a7282c4e04968c54cf03e393b668b479af2357445ff62603aac12d",
+  "src/retail-continuity.css": "01c4113314b0b586d8832595a9064e4a278a24894b9ee7f01d93a3afe9fb8cf9",
+  "src/DataConnections.tsx": "d7ba77f4e8d9363da0634cd3ce6123f05531e05b0b381d8d52c58ada5295d0a3",
+  "src/paymentTargeting.ts": "dc9cb23590381f2cde177b33fa53effb2c07d3aeeff76fbf3d53c0efacfe599d",
+  "src/brandLibrary.ts": "80eaac89b870817dc07e685ea1664144ce992876922b09250c987cdc8d045cd4",
+  "src/Studio.tsx": "81f7a8277c985abc739892279c04e00c3ca2636514389712d18314ceda297ffd",
+  "src/brandAssets.ts": "a8c25f3e6fa7c4fdf445dcfe0bdc0637d79547669f2247d6a4a5e4b335526f02",
+  "src/AudienceRuleEditor.tsx": "d430528cd315d801b322b4297a21bc8751a5d4dfa0eed5e33b9d52fc4aac68ca",
+  "src/chartGeometry.ts": "3341309ca80f0b8f91fe0d3406425452128dc6b812d59c107c496738d30b4e29",
+  "src/network-map.css": "92a9ad352700694c45c9c74abcf8c10bae40a48752a570354645c7f66bc95f22",
+  "src/GlassAtmosphere.tsx": "bb804d442c6c77268925b32e505930d341cb0bb772681f1992c031e3138e9b9a",
+  "src/CampaignLaunch.tsx": "70c830fa027e5e10c76cf873481058871e1f2d2e5cea01b7da66e50b9e90ada6",
+  "src/NewCouponForm.tsx": "cb968d5c355dbf171eb35ad43a35f6440108d0af0defffbb0b6e22cabca5f9b8",
+  "src/Partners.tsx": "9034b9348f92520c6af3f214a540f781044939b0c6444b316b4c37cf09352c98",
+  "src/campaignLibrary.ts": "7a0e983aede58d37c3f81993dd67788fe9ecdac18b38ad3edb01c064654daa9f",
+  "src/chartPeriods.ts": "f0a1bfc4953d5ddcf1f82a1da8fc8124cb03a3b8ec713dd551de8082ab88ba25",
+  "src/studioTextEdits.ts": "9b9861b891026207121f39426c68da60de6f9a62f6f2c8eebb9315b1457483b3",
+  "src/WorkspacePages.tsx": "e40ed757cd00e9a19d069b302476cce24f706f81e2fbbd1ee777af81a9a09e6e",
+  "src/campaignFlow.ts": "d15e420c23e02081cbe1ee95c9ff924c11d839a40489ee27edd3e7e746b5f6db",
+  "src/SalesChart.tsx": "03096c53cd2cf0ceac9d02c1f421b76e9d0b84605b8f44a6ee83092511dbe160",
+  "src/networkMapData.ts": "64e85ba280eebe2d97cf036b44bb5d5c2297381f006644be9c04e2893b98c1d0",
+  "src/Overview.tsx": "b77a77874de51b95e3c3ea8c8ee13436144e0ec9af28bca791ced8f803e05e1b",
+  "src/brandCatalog.ts": "48b42a31d433147d25ab7bd9f87a8137cb10e7425b0854a4a79164fd41f12f5d",
+  "src/webmcp.ts": "3a3938870f46afcd8afcb0d967b60bcb9e2f8ae0e1de2c2ef1335edf8bd3d429",
+  "src/ChartPeriodControls.tsx": "d6cb76a8dbae74b30f8797e022833ecd91ed3db9f4dfaf733b0eb26d54e91b9d",
+  "src/assistantContext.ts": "02934c71a2da2f677d9cf542cc3488a6724581a538d29052462d5fe75443678f",
+  "src/runtime.ts": "572c030dffd8d1f0c16d091256f00747b1b5b43d6963d876f2b7dff012875fa5",
+  "src/couponEngagement.ts": "088631e5665acbbaeb72f0782a0d07c2d722c8e3996555c186dd9c96f649ca64",
+  "src/Motion.tsx": "c7c04bcb0021c6c4df89ef2bc2adfaa6731c5e52916d3a9e7b6134683fcf5cf4",
+  "src/srez-shell.css": "aa7871d3fb5ae9af562d4989330ecbed2807838f71791b075dd09902aa39b435",
+  "src/SrezNavIcons.tsx": "9ad3cb8bbd0cf222bbddccb10767f1d9ac1b1416fe0e64e73cab3757fbd060b0",
+  "src/CouponTextEditor.tsx": "f2fa9f60c20610f5253d4c5ca5ca2401040f65e93a43d722694d8e871280b620",
+  "src/workflow.css": "b90ab410113ec284fa27fc5da20a42e8fa44d8e8197cbdd9f57e7167a2c5e0c5",
+  "src/NetworkHome.tsx": "74407e0adeeb551308a03ca4e42a89bfd63860418c031618ae5bf49aa84e087c",
+  "src/CampaignSteps.tsx": "e4bf4ad1d99fe549ad0354e0cbca0cbf173853554f8ca43d9d09e9a716413109",
+  "src/DataTable.tsx": "143e003172d3f4fa127235edd2670b2d34b55e3c32ddc543564b8ddb3667202a",
+  "src/assistant.ts": "69801ec83ce6f281ebdf18f6872c01388cdd7d438410675268485da3535c2775",
+  "src/audience-workspace.css": "2471efe2362a44a34f785cdcd21b0dd7f2a3bc5dd9bb3b5a80351d438664cb98",
+  "src/PaymentPreferences.tsx": "132c22a3a3037943137beccef431a91246469a488299527b282523ffdde840f0",
+  "src/coupon-workflow.css": "3653f7f6e974542c6197917f3750eb96ff7666bd138cad90ecea3a824039f46e",
+  "src/PartnerStyleModal.tsx": "c490e165323134a670bcf585d10313b4a22fc6e329f207f41c9ee37326f25341",
+  "src/designSchema.ts": "2f1112bf76ac67928db1a9d0b24b6832dcd772b76dae7c09505c3b60d1a0d41c",
+  "src/flandersCatalog.ts": "7ab66022028448ec94b53b47c05440756652c8fe632dfc51ba665600ad225e1c",
+  "src/CouponResults.tsx": "42fa8be5bb62296caadd6ad2204c8de495443686b094adbf3fa7f263cae66b77",
+  "src/designHistory.ts": "891382ac2b8128a319a6fef9bf47e208f3bd54808cf9308fa2d31ab9fe2305ce",
+  "src/pagesStore.ts": "84d1f454273833b90a8af7af30da10b1ef28405ef0c9c229e61c7ecf33ef03ac",
+  "src/Coupon.tsx": "386e8dde2de5bb671b8ac2f993e4064c83a632db4da7a99ec84aa19ec55aa54a",
+  "src/OtherPages.tsx": "276076a4f699abf6c3ab60e67e6bcadeb3a04276ef7954bd4fe904516872e406",
+  "src/useCanvasZoom.ts": "45c5254680ad229b8434f9af1c1a0e2d341c3e0875e6771ecf426592f95144c0",
+  "src/NetworkMap.tsx": "946fbb4bfdf362ce69f9898e6deb07c5ed8b232856b2d2358dfef5ecdd85aa33",
+  "src/domain.ts": "81de0c106478a0bc26c5b37c8e8fbc8621fcbf4335d50ea50b401dbea8738a35",
+  "src/importer.ts": "1f510c7aac504243e6da0b713b718921cb55b5df002ad39c51b367dc73011cef",
+  "src/CouponStylePicker.tsx": "653d6b35545f566cb5ba7d4902d0ba6d34109121594d8b73a59edb90cc1284fe",
+  "src/NetworkMapCanvas.tsx": "38c72b3d7a97243513e301c875fb952c7086aaa59930179284b80ba27d97991b",
+  "src/NetworkMapTeaser.tsx": "3657b78552b8ad6ebee6021ab65ec6ac1b10d5db8575dca5fe6d7288c7706767",
+  "src/demoCatalog.ts": "ffa39c0f69593ea5b1935cd6f19caad6316eae6d4759b7b95c166a4dc654ff04",
+  "src/Brand.tsx": "fd42d3100a8da9a9975be3266061fd4e6cc06c557b58a2fdda66c2dfcc6cd586",
+  "src/expenses.ts": "10fa9f432abfbbd5b237d5c9b99b7ccadba589aa3297fa779fe3cac01501e240",
+  "src/persistence.ts": "8e54a83f939f1a87e353f9d2d579c7f63fa06a8620e3dc69693bd9e7612bf620",
+  "src/pagesUploads.ts": "0ea2b7828a57277909eb77ae5ed9261f61b222da205266258720b8d6958429bb",
+  "src/motion.css": "628f7b19cae82d791e3bd0304c322f5bb5c7fb04fb264ff8cb7e4a22e929ed4f",
+  "src/MapSchematic.tsx": "fcf56821ee96e5a16098ea7146643e5cdedea9f3cd3c256ab72c24030c1cc11c",
+  "src/Performance.tsx": "fc8fe7babc20017c1e518cf318738d60dd2da32191c6784c3d692cd299fe1bf8",
+  "src/calendar.css": "5561e3277c80e34d6ef94499c41f399315a050289b03eb119f8a9dce2fde344b",
+  "src/BoundedNumberInput.tsx": "013b1b1c3efc2f633b5cf6827c1f6184629dcde502855892b72ddc28d9f46785",
+  "src/mobile.css": "d7f25aeb5ff822001dd994043a56572634331a2927649d6965f87dbdd410dc93",
+  "src/store.ts": "301c628423128b913e945677e0527ca6157f29ece610f9cfbbb26e69b16c2ae8",
+  "src/Customers.tsx": "ec02793d94d89aea5a83e4fc7dfc5e558da566541155eb3944b6728fbbe59919",
+  "src/ui.tsx": "229b32df54ab416db3566b469b68202276d1cd207a2d180941736454fdef4992"
 }

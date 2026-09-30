@@ -10,3 +10,18 @@
 @media(max-width:768px){.sales-filters .field>input,.sales-filters .field>select{height:42px;min-height:42px;max-height:42px;font-size:12px}.campaign-stepper{top:0;overflow:auto;border-radius:0;padding:10px 0}.campaign-stepper button{min-width:106px;font-size:11px;padding:10px 8px;min-height:40px}.studio-continue{bottom:calc(74px + env(safe-area-inset-bottom));gap:8px;flex-wrap:wrap;padding:11px;border-radius:14px}.studio-continue>div{display:none}.studio-continue>.button{flex:1;font-size:11px;padding:10px}.studio-continue>.primary{flex:2}.studio-continue svg{flex-shrink:0}.launch-metrics{gap:8px}.launch-metrics>div{padding:12px 9px}.launch-metrics strong{font-size:19px}.launch-metrics small{font-size:10px}.launch-actions>.button{flex:1;min-width:130px}.profit-controls{align-items:stretch;flex-direction:column;gap:12px}.profit-controls>div{gap:10px}.profit-controls>.button{align-self:flex-start}.expense-row{grid-template-columns:minmax(0,1fr) minmax(110px,.8fr) 36px;gap:6px}.expense-row input{font-size:13px;padding:9px}.expense-row>label>span{display:none}.chart-fullscreen{inset:0!important;width:100%!important;height:100dvh;max-height:100dvh!important;border-radius:0!important;padding:12px!important}.chart-fullscreen>.sales-chart{padding:14px;min-height:calc(100% - 70px)}.chart-fullscreen .chart-plot>svg{min-height:200px;max-height:none}.data-connect .split{align-items:stretch;flex-direction:column}.connection-options>button{padding:14px}.data-connect .primary{white-space:normal}.chart-fullscreen .chart-heading{flex-wrap:wrap}}
 .review-summary{display:grid;gap:12px;margin-top:20px;padding:18px;border:1px solid #e6e3de;border-radius:13px}.review-summary small{display:block;color:#777;font-size:11px;margin-bottom:6px}.review-summary b{font-size:13px;font-weight:500;line-height:1.5;white-space:pre-line}
 fieldset.studio-properties{border:0;padding:0 0 12px;min-width:0}
+
+/* One spacing rhythm for data sources, profiles and receipt imports. */
+.data-page{display:grid;gap:24px;min-width:0}
+.data-page>.kpi-strip,.data-page>.panel,.data-page>.data-grid,.data-page>.error-box{margin:0}
+.data-page>.data-grid{gap:24px;min-width:0}
+.data-page .panel{padding:24px;min-width:0}
+.data-page .panel h2{margin:0 0 10px}
+.data-page .panel p{line-height:1.6}
+.data-page .panel h2+p{margin-top:0}
+.data-page .panel>.section-gap{margin-top:20px}
+.data-page .split{align-items:flex-start;gap:20px;flex-wrap:wrap}
+.data-page .split>.button{flex-shrink:0}
+.data-page .split>div{flex:1;min-width:min(100%,240px)}
+.data-page .panel>.field{margin-top:20px}
+@media(max-width:700px){.data-page,.data-page>.data-grid{gap:16px}.data-page .panel{padding:20px}.data-page .split{gap:16px}}

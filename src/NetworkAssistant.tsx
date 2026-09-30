@@ -34,9 +34,9 @@ export function Assistant({filters}:{filters:Filters}){
   setPending({question:value});setQuestion('');
   try{
    const {assistantContext}=await import('./assistantContext');
-   const snapshot=assistantContext(current.data,filters,current.settings.name,current.campaigns,current.expenses);
+   const snapshot=assistantContext(current.data,filters,current.settings.name,current.campaigns);
    const response=await fetch('/api/assistant/replies',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json','Idempotency-Key':crypto.randomUUID()},body:JSON.stringify({question:value,history:current.chat.slice(-6).map(({question,answer})=>({question:question.slice(0,4000),answer:answer.slice(0,8000)})),snapshot})});
-   const answer=await response.json();if(!response.ok)throw new Error(answer.error||'Не удалось получить ответ');
+   const answer=await response.json();if(response.status===503){useStore.setState(s=>({chat:[...s.chat,answerQuestion(value,current.data!,filters)]}));setPending(null);return;}if(!response.ok)throw new Error(answer.error||'Не удалось получить ответ');
    if(request.current!==controller)return;
    useStore.setState(s=>({chat:[...s.chat,answer]}));setPending(null);
   }catch(e){if(request.current===controller)setPending({question:value,error:controller.signal.aborted?'Ожидание остановлено. Запрос у провайдера мог продолжиться.':(e as Error).message});}
@@ -67,7 +67,7 @@ export function Assistant({filters}:{filters:Filters}){
   <div className="assistant-stage">
    <AnimatePresence initial={false}>{!hasConversation&&<motion.div key="welcome" className="assistant-welcome-wrap" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}} transition={minimal?{duration:0}:{height:{duration:.62,ease:easeOut},opacity:{duration:.22}}}><section className="assistant-welcome">
     <h2>Знает вашу сеть.<br/><span>Объясняет главное.</span></h2>
-    <p>Продажи и кампании «{state.settings.name}» — в одном контексте. Задайте вопрос — Срез сопоставит показатели, объяснит изменения и поможет увидеть следующий шаг.</p>
+    <p>Покупатели и кампании «{state.settings.name}» — в одном контексте. Задайте вопрос — Срез поможет выбрать аудиторию, объяснит результат купонов и поможет увидеть следующий шаг.</p>
    </section></motion.div>}</AnimatePresence>
    <form ref={composeRef} className="assistant-compose assistant-glass" onSubmit={e=>{e.preventDefault();send(question);}}>
     <label className="sr-only" htmlFor="network-question">Вопрос помощнику</label>

@@ -16,6 +16,12 @@ import './assistant.css';
 import './mobile.css';
 import './workflow.css';
 import './network-map.css';
+import './audience-workspace.css';
+import './partners.css';
+import './coupon-workflow.css';
+import './srez-shell.css';
+import './liquid-glass.css';
+import './retail-continuity.css';
 async function mount(){
  if(isPages)await (await import('./pagesStore')).initializePages();
  const Router=isPages?HashRouter:BrowserRouter;

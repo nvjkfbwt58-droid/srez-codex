@@ -37,7 +37,7 @@ test('net profit reconciles stores, days, comparison and assistant; incomplete i
  assert.equal(reportAfterExpenses(gross,{...DEFAULT_FILTERS,category:2},plans).ready,false);
  assert.equal(reportAfterExpenses(gross,{...DEFAULT_FILTERS,min:50000},plans).ready,false);
  const snapshot=assistantContext(data,DEFAULT_FILTERS,'Демо',[],plans);
- assert.equal(snapshot.current.profit,gross.profit);assert.equal(snapshot.operatingExpenses.netProfit,result.net.profit);
+ assert.ok(!('profit' in snapshot.current));assert.ok(!('operatingExpenses' in snapshot));
 });
 test('campaign demo starts on an allowed day and respects empty or invalid schedules',()=>{
  assert.equal(firstOfferTime(defaultOffer),'2026-09-16T10:00');

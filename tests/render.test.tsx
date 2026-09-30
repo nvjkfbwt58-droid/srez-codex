@@ -5,16 +5,19 @@ import {renderToString} from 'react-dom/server';
 import {MemoryRouter,Route,Routes} from 'react-router-dom';
 import {seedData,DEFAULT_FILTERS,defaultOffer,defaultDesign,audience,assign,money,num} from '../src/domain';
 import {useStore} from '../src/store';
-import {Overview} from '../src/Overview';
+import {NetworkHome} from '../src/NetworkHome';
+import {Partners} from '../src/Partners';
+import {CouponResults} from '../src/CouponResults';
+import {Assistant} from '../src/NetworkAssistant';
 import {Customers} from '../src/Customers';
 import {Campaigns,CampaignEditor} from '../src/Campaigns';
 import {Studio} from '../src/Studio';
-import {Sales,Assistant,Experiments,DataPage,SettingsPage} from '../src/OtherPages';
+import {DataPage,SettingsPage} from '../src/WorkspacePages';
 import {CouponRenderer} from '../src/Coupon';
 const memory=new Map<string,string>();Object.defineProperty(globalThis,'localStorage',{value:{getItem:(k:string)=>memory.get(k)||null,setItem:(k:string,v:string)=>memory.set(k,v),removeItem:(k:string)=>memory.delete(k)},configurable:true});
 Object.defineProperty(globalThis,'location',{value:{search:'',pathname:'/overview'},configurable:true});
 const data=seedData();useStore.setState({data});useStore.getInitialState().data=data;
-test('all page components render real content without JSX/runtime errors (server smoke, not browser QA)',()=>{const cases:[string,React.ReactNode,string][]=[['/overview',<Overview filters={DEFAULT_FILTERS} onFilters={()=>{}}/>,'Обзор'],['/customers',<Customers/>,'Условия сегмента'],['/campaigns',<Campaigns/>,'Вернуть в будни'],['/campaigns/CP-104',<CampaignEditor/>,'Покупатели по условиям'],['/coupons/CP-104/design',<Studio/>,'Студия купонов'],['/sales',<Sales filters={DEFAULT_FILTERS}/>,'Динамика'],['/assistant',<Assistant filters={DEFAULT_FILTERS}/>,'Знает вашу сеть.'],['/experiments/CP-097',<Experiments/>,'Положительный эффект пока не подтверждён'],['/data',<DataPage/>,'Импорт чеков'],['/settings',<SettingsPage/>,'OpenAI']];for(const [path,node,text] of cases){const html=renderToString(<MemoryRouter initialEntries={[path]}><Routes><Route path={path.includes('/design')?'/coupons/:id/design':path.startsWith('/campaigns/')?'/campaigns/:id':path.startsWith('/experiments/')?'/experiments/:id':path} element={node}/></Routes></MemoryRouter>);assert.ok(html.length>1000,path);assert.ok(html.includes(text)||path==='/overview',path);assert.ok(!html.includes('NaN'),path);}});
+test('all page components render real content without JSX/runtime errors (server smoke, not browser QA)',()=>{const cases:[string,React.ReactNode,string][]=[['/home',<NetworkHome filters={DEFAULT_FILTERS}/>,'Знать привычки.'],['/customers',<Customers/>,'Условия сегмента'],['/campaigns',<Campaigns/>,'Вернуть в будни'],['/campaigns/CP-104',<CampaignEditor/>,'Покупатели по условиям'],['/coupons/CP-104/design',<Studio/>,'Студия купонов'],['/partners',<Partners/>,'Партнёры'],['/assistant',<Assistant filters={DEFAULT_FILTERS}/>,'Знает вашу сеть.'],['/results',<CouponResults/>,'Меняется ли поведение'],['/data',<DataPage/>,'Импорт чеков'],['/settings',<SettingsPage/>,'OpenAI']];for(const [path,node,text] of cases){const html=renderToString(<MemoryRouter initialEntries={[path]}><Routes><Route path={path.includes('/design')?'/coupons/:id/design':path.startsWith('/campaigns/')?'/campaigns/:id':path.startsWith('/experiments/')?'/experiments/:id':path} element={node}/></Routes></MemoryRouter>);assert.ok(html.length>1000,path);assert.ok(html.includes(text)||path==='/overview',path);assert.ok(!html.includes('NaN'),path);}});
 test('all coupon formats bind the same offer and do not disclose assignment tokens',()=>{for(const format of ['full','list','banner'] as const){const html=renderToString(<CouponRenderer design={defaultDesign} offer={defaultOffer} format={format}/>);assert.match(html,/16–17 сентября и 23–24 сентября/);assert.match(html,/10/);assert.ok(!html.includes('DEMO-CP-'));}});
 
 test('campaign card reserve agrees with actual assignments for an odd eligible audience',()=>{
@@ -27,7 +30,7 @@ test('campaign card reserve agrees with actual assignments for an odd eligible a
  try {
  const offered=assign(eligible.map(c=>c.id),campaign.id,campaign.offer.control).filter(a=>a.group==='offer').length;
  const html=renderToString(<MemoryRouter><Campaigns/></MemoryRouter>).replaceAll('&#x27;',"'");
- assert.ok(html.includes('Максимум скидок '+money(offered*campaign.offer.cap)));
+ assert.ok(!html.includes('Максимум скидок'));assert.ok(!html.includes('Маржа'));
  assert.ok(html.includes('<strong>'+num(offered)+'</strong>'));
  } finally {useStore.getInitialState().data=data;}
 });

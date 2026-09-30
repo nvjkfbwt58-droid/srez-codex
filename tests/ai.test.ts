@@ -18,18 +18,18 @@ async function harness(assistant?:any){
  const url=`http://127.0.0.1:${(server.address() as any).port}/api/assistant/replies`;
  return {store,url,post:async(body=payload(),key='request-one')=>{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key},body:JSON.stringify(body)});return{status:r.status,body:await r.json() as any};},close:async()=>{await new Promise<void>(r=>server.close(()=>r()));store.close();}};
 }
-test('assistant context uses filtered aggregates in kopecks, never raw customers or receipts',()=>{
+test('assistant context contains activity only, never financial or personal records',()=>{
  const f={...DEFAULT_FILTERS,stores:['S1'],category:2},s=assistantContext(data,f,'Test',[]);
- assert.equal(s.current.revenue,report(data,f).revenue);assert.equal(s.stores.length,1);assert.equal(s.filters.category,'Снеки');
+ assert.equal(s.current.count,report(data,f).count);assert.equal(s.stores.length,1);assert.ok(!('revenue' in s.current));
  const json=JSON.stringify(s);for(const field of ['birthDate','customerId','receipts','consent'])assert.ok(!json.includes('"'+field+'"'));
- assert.ok(json.length<120000);assert.equal(s.moneyUnit,'kopecks');assert.equal(s.period.previousTo,'2026-08-16');
+ assert.ok(json.length<120000);assert.ok(!('moneyUnit' in s));assert.equal(s.period.previousTo,'2026-08-16');
  assert.ok(assistantInputSchema.safeParse({...payload(),snapshot:s}).success);
  assert.equal(assistantInputSchema.safeParse({...payload(),snapshot:{...s,customers:data.customers.slice(0,1)}}).success,false);
 });
 test('assistant is explicit when provider is not configured',async()=>{const h=await harness();try{assert.equal((await h.post()).status,503);assert.equal(h.store.all('assistant-request').length,0);}finally{await h.close();}});
 test('assistant forwards history, deduplicates retries and validates before billing',async()=>{
- let calls=0;const h=await harness({reply:async(input:any)=>{calls++;assert.equal(input.history[0].question,'Первый вопрос');return{answer:'Ответ по данным',section:'sales'};}});
- try{const p={...payload(),history:[{question:'Первый вопрос',answer:'Первый ответ'}]};const a=await h.post(p),b=await h.post(p);assert.equal(a.status,200);assert.deepEqual(a.body,b.body);assert.equal(calls,1);assert.equal(a.body.provider,'openai');assert.match(a.body.context,/Демонстрационный набор/);assert.match(a.body.link,/from=2026-08-17/);assert.equal((await h.post({...p,question:'Изменённый вопрос'})).status,409);assert.equal((await h.post({...p,question:'x'.repeat(4001)},'bad')).status,400);assert.equal(calls,1);}finally{await h.close();}
+ let calls=0;const h=await harness({reply:async(input:any)=>{calls++;assert.equal(input.history[0].question,'Первый вопрос');return{answer:'Ответ по данным',section:'customers'};}});
+ try{const p={...payload(),history:[{question:'Первый вопрос',answer:'Первый ответ'}]};const a=await h.post(p),b=await h.post(p);assert.equal(a.status,200);assert.deepEqual(a.body,b.body);assert.equal(calls,1);assert.equal(a.body.provider,'openai');assert.match(a.body.context,/Демонстрационный набор/);assert.equal(a.body.link,'/customers');assert.equal((await h.post({...p,question:'Изменённый вопрос'})).status,409);assert.equal((await h.post({...p,question:'x'.repeat(4001)},'bad')).status,400);assert.equal(calls,1);}finally{await h.close();}
 });
 test('provider errors do not leak credentials and do not silently fall back',async()=>{
  let calls=0;const h=await harness({reply:async()=>{calls++;throw Object.assign(new Error('secret-do-not-expose'),{status:401});}});

@@ -60,3 +60,25 @@ test('material removal and restore are brand-scoped and preserve bytes and coupo
   assert.ok(restored.body.assets.some((a:any)=>a.id===asset.id));
  }finally{await h.close();}
 });
+
+test('partner lifecycle persists an independent style and preserves existing coupon snapshots',async()=>{
+ const h=await harness();
+ const remove=async(id:string)=>{const response=await fetch(`http://127.0.0.1:${h.port}/api/brands/${id}`,{method:'DELETE'});return {status:response.status,body:await response.json() as any};};
+ try{
+  const created=await h.request('/brands',{name:'Новый партнёр',primary:'#31594A'});assert.equal(created.status,201);const id=created.body.id;
+  const brand=(await h.request('/brands/'+id)).body;assert.equal(brand.profile.name,'Новый партнёр');
+  const design={...defaultDesign,brandId:id,asset:'/assets/brand-neutral.svg',brandTokens:{name:'Новый партнёр',primary:'#31594A',ink:'#18221D',paper:'#F3F1EA',font:'Inter',pattern:''}};
+  assert.equal((await h.request('/coupons/partner-test/design',{design,expectedRevision:0})).status,200);
+  assert.equal((await remove('kvartal')).status,409);assert.equal((await remove(id)).status,200);
+  assert.ok(!(await h.request('/brands')).body.some((b:any)=>b.id===id));assert.equal(h.store.get('coupon','partner-test').design.brandId,id);
+  await h.request('/brands/'+id+'/restore',{});assert.ok((await h.request('/brands')).body.some((b:any)=>b.id===id));
+ }finally{await h.close();}
+});
+
+test('Flanders preset is ready for coupon saving with its logo, style and product materials',async()=>{
+ const h=await harness();try{
+  const choices=(await h.request('/brands')).body;assert.ok(choices.some((b:any)=>b.id==='flanders'));assert.ok(!choices.some((b:any)=>b.id==='lemon'));
+  const brand=(await h.request('/brands/flanders')).body;assert.equal(brand.profile.logoAssetId,'official-flanders-logo');assert.equal(brand.profile.typography.display.family,'Prata');assert.equal(brand.assets.length,20);
+  const saved=await h.request('/coupons/flanders-preset/design',{design:{...defaultDesign,brandId:'flanders',asset:'/assets/flanders.png',logo:'/brand/flanders-logo.webp'},expectedRevision:0});assert.equal(saved.status,200);
+ }finally{await h.close();}
+});

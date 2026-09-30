@@ -1,0 +1,17 @@
+import {addDays,DAY,dayStart,localDay,type Campaign,type Dataset,type Receipt,type Redemption} from './domain';
+export function couponEngagement(c:Campaign,data:Dataset,events:Redemption[],returns:Receipt[],window=14){
+ const receipts=[...new Map([...data.receipts,...events.map(e=>({...e.receipt,couponId:e.campaignId,assignmentId:e.assignmentId})),...returns].map(r=>[r.id,r])).values()];
+ const from=c.startedAt?localDay(c.startedAt.includes('+')||c.startedAt.endsWith('Z')?c.startedAt:c.startedAt+':00+03:00'):(c.snapshot?.offer||c.offer).from;
+ const available=receipts.reduce((date,r)=>localDay(r.at)>date?localDay(r.at):date,data.start),through=[available,addDays(from,window-1)].sort()[0];
+ const elapsed=Math.max(0,Math.min(window,Math.round((dayStart(through)-dayStart(from))/DAY)+1)),before=addDays(from,-elapsed);
+ const assigned=new Map(c.assignments.map(a=>[a.customerId,a])),byCustomer=new Map<string,Receipt[]>();
+ for(const r of receipts){if(r.customerId){const list=byCustomer.get(r.customerId)||[];list.push(r);byCustomer.set(r.customerId,list);}}
+ const attributed=receipts.filter(r=>r.type==='sale'&&r.couponId===c.id&&localDay(r.at)>=from&&localDay(r.at)<=through);
+ const linked=attributed.filter(r=>r.customerId&&assigned.get(r.customerId)?.group==='offer'&&assigned.get(r.customerId)?.id===r.assignmentId);
+ const rows=c.assignments.map(a=>{const history=byCustomer.get(a.customerId)||[],prior=history.filter(r=>r.type==='sale'&&localDay(r.at)>=before&&localDay(r.at)<from),after=history.filter(r=>r.type==='sale'&&localDay(r.at)>=from&&localDay(r.at)<=through),coupon=linked.filter(r=>r.customerId===a.customerId).sort((a,b)=>a.at.localeCompare(b.at)),first=coupon[0];return {customerId:a.customerId,group:a.group,before:prior.length,after:after.length,redeemed:!!first,mature:!!first&&dayStart(through)-dayStart(localDay(first.at))>=7*DAY,repeat:!!first&&after.some(r=>localDay(r.at)>localDay(first.at)&&localDay(r.at)<=addDays(localDay(first.at),7))};});
+ const group=(name:'offer'|'control')=>{const members=rows.filter(r=>r.group===name),n=members.length;return {n,visitors:members.filter(r=>r.after>0).length,before:n?members.reduce((s,r)=>s+r.before,0)/n:null,after:n?members.reduce((s,r)=>s+r.after,0)/n:null};};
+ const offer=c.snapshot?.offer||c.offer,products=new Map(data.products.map(p=>[p.id,p]));
+ const baskets=linked.map(receipt=>{const back=receipts.filter(r=>r.type==='return'&&r.originalId===receipt.id&&localDay(r.at)<=through);const other=receipt.lines.filter(l=>offer.category===null?l.productId!==offer.productId:products.get(l.productId)?.category!==offer.category);const returned=back.flatMap(r=>r.lines);const additional=other.reduce((sum,l)=>sum+Math.max(0,l.quantity-returned.filter(x=>x.originalLineId?x.originalLineId===l.id:x.productId===l.productId).reduce((n,x)=>n+x.quantity,0)),0);return {receipt,additional,returned:returned.reduce((s,l)=>s+l.quantity,0)};});
+ const matured=rows.filter(r=>r.redeemed&&r.mature),offerGroup=group('offer'),controlGroup=group('control');
+ return {from,through,elapsed,window,rows,baskets,offerGroup,controlGroup,unlinked:attributed.length-linked.length,redeemers:rows.filter(r=>r.redeemed).length,repeatEligible:matured.length,repeatRate:matured.length?matured.filter(r=>r.repeat).length/matured.length:null,additional:baskets.reduce((n,b)=>n+b.additional,0),complete:elapsed===window,baselineComplete:elapsed>0&&data.start<=before};
+}
