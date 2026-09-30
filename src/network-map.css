@@ -25,3 +25,8 @@
 .map-instruction{z-index:4;background:#fffef9;pointer-events:auto}
 
 .map-gesture-popover{position:absolute;z-index:7;left:12px;bottom:65px;width:280px;max-width:calc(100% - 80px);padding:18px;border:1px solid #d7dfd3;border-radius:18px;background:#fffef9;box-shadow:0 8px 30px #1d2d2725;font-size:12px;line-height:1.5}.map-gesture-popover>button{float:right;border:0;background:transparent;padding:0;color:#31543d}.map-gesture-popover p{margin-top:10px}.map-gesture-popover small{display:block;margin-top:10px;color:#657366}
+
+/* The offline drawing and its pins share one fixed coordinate plane. */
+.schematic-viewport{container-type:size;background:#eaece4}
+.schematic-world{inset:auto;left:50%;top:50%;width:min(100cqw,128.205cqh);height:auto;aspect-ratio:1000 / 780;transform-origin:center}
+@supports not (width:1cqw){.schematic-world{width:100%;height:auto;aspect-ratio:1000 / 780}}

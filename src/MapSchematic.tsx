@@ -1,6 +1,6 @@
 // A local schematic, deliberately labelled as such. No remote tiles or GPU required.
 export function MapSchematic({mini=false}:{mini?:boolean}){
- return <svg className="map-schematic" viewBox="0 0 1000 780" preserveAspectRatio="none" aria-hidden="true">
+ return <svg className="map-schematic" viewBox="0 0 1000 780" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <defs><pattern id={mini?'city-grid-mini':'city-grid'} width="74" height="65" patternUnits="userSpaceOnUse" patternTransform="rotate(-19)"><rect width="74" height="65" fill="#eaece4"/><rect x="8" y="8" width="57" height="47" rx="7" fill="#f0f0e9" stroke="#e0e2d9" strokeWidth=".7"/><path d="M0 0H74 M0 0V65" stroke="#fafaf5" strokeWidth="6"/></pattern></defs>
   <rect width="1000" height="780" fill={`url(#${mini?'city-grid-mini':'city-grid'})`}/>
   <g fill="#cedbc5" stroke="#c1d1b7" strokeWidth="1.3" opacity=".85"><path d="M23 30L279 0 250 124 172 157 112 97 27 160Z"/><path d="M768 40L977 3 1000 180 920 206 828 147Z"/><path d="M676 523L782 461 877 537 850 614 937 692 772 723 701 645Z"/><path d="M83 423L215 441 254 535 196 612 64 546Z"/><path d="M434 475L502 453 560 497 526 555 434 555 401 517Z"/></g>
