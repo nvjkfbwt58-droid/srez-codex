@@ -153,7 +153,7 @@
   "src/Coupon.tsx": "386e8dde2de5bb671b8ac2f993e4064c83a632db4da7a99ec84aa19ec55aa54a",
   "src/OtherPages.tsx": "276076a4f699abf6c3ab60e67e6bcadeb3a04276ef7954bd4fe904516872e406",
   "src/useCanvasZoom.ts": "45c5254680ad229b8434f9af1c1a0e2d341c3e0875e6771ecf426592f95144c0",
-  "src/NetworkMap.tsx": "fa24216cec6ac1fb7a11e488ff72fe4d32a4097206d1984bae60674ca52d14a5",
+  "src/NetworkMap.tsx": "bb6afcfe3f282446f6b25c295657a78ecbd0d0b2d71d72b11abdd62c76b1ee8b",
   "src/domain.ts": "81de0c106478a0bc26c5b37c8e8fbc8621fcbf4335d50ea50b401dbea8738a35",
   "src/importer.ts": "1f510c7aac504243e6da0b713b718921cb55b5df002ad39c51b367dc73011cef",
   "src/CouponStylePicker.tsx": "653d6b35545f566cb5ba7d4902d0ba6d34109121594d8b73a59edb90cc1284fe",
