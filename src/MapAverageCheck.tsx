@@ -2,8 +2,7 @@ import {useState} from 'react';
 import {dateRu,money,num} from './domain';
 import type {storeAverageCheck} from './storeAverageCheck';
 
-export function MapAverageCheck({report}:{report:ReturnType<typeof storeAverageCheck>}){
- const [mode,setMode]=useState<'visits'|'average'>('visits');
+export function MapAverageCheck({report,mode,onModeChange:setMode}:{report:ReturnType<typeof storeAverageCheck>;mode:'visits'|'average';onModeChange:(mode:'visits'|'average')=>void}){
  const [hover,setHover]=useState<number|null>(null);
  const isAverage=mode==='average',format=(value:number)=>isAverage?money(value):num(value);
  const daily=report.daily.map(day=>({...day,value:isAverage?day.value:day.count}));

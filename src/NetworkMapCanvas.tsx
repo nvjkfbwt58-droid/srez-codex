@@ -69,7 +69,9 @@ export const NetworkMapCanvas=forwardRef<MapHandle,Props>(function NetworkMapCan
     });
     m.on('error',event=>{if(import.meta.env.DEV)console.warn('[Network map resource]',event.error.message);if(!m.getStyle())fallback(event.error);});
     m.on('webglcontextlost',fallback);
-    // MapLibre already observes subsequent resizes, including full-screen changes.
+    // Full-screen and sidebar changes can resize the container without a window resize.
+    resize=new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{if(!closed&&!failed&&map.current===m)m.resize();});});
+    resize.observe(container.current!);
    }catch(error){fallback(error);}
    };
    resize=new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(start);});

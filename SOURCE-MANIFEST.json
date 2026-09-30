@@ -124,7 +124,7 @@
   "src/WorkspacePages.tsx": "e40ed757cd00e9a19d069b302476cce24f706f81e2fbbd1ee777af81a9a09e6e",
   "src/campaignFlow.ts": "d15e420c23e02081cbe1ee95c9ff924c11d839a40489ee27edd3e7e746b5f6db",
   "src/SalesChart.tsx": "03096c53cd2cf0ceac9d02c1f421b76e9d0b84605b8f44a6ee83092511dbe160",
-  "src/networkMapData.ts": "64e85ba280eebe2d97cf036b44bb5d5c2297381f006644be9c04e2893b98c1d0",
+  "src/networkMapData.ts": "e1c31ca0d385ac849badbcd0c54f456ce7d4e02d230d2653e743c879c2497e05",
   "src/Overview.tsx": "b77a77874de51b95e3c3ea8c8ee13436144e0ec9af28bca791ced8f803e05e1b",
   "src/brandCatalog.ts": "48b42a31d433147d25ab7bd9f87a8137cb10e7425b0854a4a79164fd41f12f5d",
   "src/webmcp.ts": "3a3938870f46afcd8afcb0d967b60bcb9e2f8ae0e1de2c2ef1335edf8bd3d429",
@@ -153,11 +153,11 @@
   "src/Coupon.tsx": "386e8dde2de5bb671b8ac2f993e4064c83a632db4da7a99ec84aa19ec55aa54a",
   "src/OtherPages.tsx": "276076a4f699abf6c3ab60e67e6bcadeb3a04276ef7954bd4fe904516872e406",
   "src/useCanvasZoom.ts": "45c5254680ad229b8434f9af1c1a0e2d341c3e0875e6771ecf426592f95144c0",
-  "src/NetworkMap.tsx": "ab0b78a16d84023715fdb053ba775fbf8ef12056889c945ded5abc8ea4b2866c",
+  "src/NetworkMap.tsx": "fa24216cec6ac1fb7a11e488ff72fe4d32a4097206d1984bae60674ca52d14a5",
   "src/domain.ts": "81de0c106478a0bc26c5b37c8e8fbc8621fcbf4335d50ea50b401dbea8738a35",
   "src/importer.ts": "1f510c7aac504243e6da0b713b718921cb55b5df002ad39c51b367dc73011cef",
   "src/CouponStylePicker.tsx": "653d6b35545f566cb5ba7d4902d0ba6d34109121594d8b73a59edb90cc1284fe",
-  "src/NetworkMapCanvas.tsx": "38c72b3d7a97243513e301c875fb952c7086aaa59930179284b80ba27d97991b",
+  "src/NetworkMapCanvas.tsx": "ccbc03fdbceb5a1cb6c367393eff3c18aee03a1adb6b660b8a21331c6346eef6",
   "src/NetworkMapTeaser.tsx": "3657b78552b8ad6ebee6021ab65ec6ac1b10d5db8575dca5fe6d7288c7706767",
   "src/demoCatalog.ts": "ffa39c0f69593ea5b1935cd6f19caad6316eae6d4759b7b95c166a4dc654ff04",
   "src/Brand.tsx": "fd42d3100a8da9a9975be3266061fd4e6cc06c557b58a2fdda66c2dfcc6cd586",
@@ -173,7 +173,7 @@
   "src/store.ts": "301c628423128b913e945677e0527ca6157f29ece610f9cfbbb26e69b16c2ae8",
   "src/Customers.tsx": "ec02793d94d89aea5a83e4fc7dfc5e558da566541155eb3944b6728fbbe59919",
   "src/ui.tsx": "229b32df54ab416db3566b469b68202276d1cd207a2d180941736454fdef4992",
-  "src/MapAverageCheck.tsx": "11f96b589478db23bbb93ccb979d2bf490e959d0e30b34d167e1ea9001b4e1ee",
-  "src/storeAverageCheck.ts": "0772a7c3f05089724b076dcea88060cf011ebb67aa4cdc5e93a8e27e53dc5764",
-  "tests/storeAverageCheck.test.ts": "bc82ae601475017534eb340e5096b3e17ee06768356e952e2e38e8e6338b26d7"
+  "src/MapAverageCheck.tsx": "3b4d18ed13a8b4a8e56d4a0547929c0a29fc3f26f14b57f063a6857520d68d3e",
+  "src/storeAverageCheck.ts": "60a155af02b2385c6e2e0764ba609bf9f25ab38caa0103e34c5d387ba6dd6198",
+  "tests/storeAverageCheck.test.ts": "0b928f9a4001014036b2aba89c791b67edf84e57504742ddd00f1644481709a1"
 }

@@ -13,3 +13,12 @@ export function storeAverageCheck(data:Dataset,filters:Filters,storeId:string){
  return {before,now,previousFrom,previousTo,change:before!==null&&before>0&&now!==null?(now/before-1)*100:null,count:current.length,previousCount:previous.length,
   daily:Array.from({length},(_,i)=>{const date=addDays(filters.from,i);return {date,value:average(groups.get(date)||[]),count:(groups.get(date)||[]).length};})};
 }
+
+export function storeAverageValues(data:Dataset,filters:Filters){
+ const totals=new Map<string,{sum:number;count:number}>();
+ for(const receipt of selectReceipts(data,{from:filters.from,to:filters.to,stores:[],returns:'no'})){
+  const value=totals.get(receipt.storeId)||{sum:0,count:0};
+  value.sum+=receiptNet(receipt);value.count++;totals.set(receipt.storeId,value);
+ }
+ return Object.fromEntries([...totals].map(([id,value])=>[id,value.sum/value.count]));
+}

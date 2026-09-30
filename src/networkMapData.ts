@@ -11,7 +11,7 @@ const locations = [
 ] as const;
 export const mapStores=stores.map((store,i)=>({...store,lng:locations[i][0],lat:locations[i][1],district:locations[i][2],area:locations[i][3]}));
 export const districts=['Все районы','Центр','Север','Восток','Юг','Запад'];
-export type MapMetric='customers'|'count'|'growth';
+export type MapMetric='count'|'average';
 export const validStoreIds=(ids:readonly string[])=>stores.filter(s=>ids.includes(s.id)).map(s=>s.id);
 export function initialMapSelection(ids:readonly string[]){return ids.length?validStoreIds(ids):stores.map(s=>s.id);}
 export function selectedFilters(filters:Filters,ids:readonly string[]):Filters {
