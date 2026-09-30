@@ -33,3 +33,5 @@
 
 @media(min-width:769px){.srez-shell>main{margin-left:236px;width:calc(100% - 236px)}.srez-shell .sidebar nav span,.srez-shell .sidebar .network span,.srez-shell .sidebar-bottom>button span,.srez-shell .sidebar-bottom>a span,.srez-shell .sidebar .profile>div:last-child{display:block}.srez-shell .sidebar nav a,.srez-shell .sidebar-bottom>button,.srez-shell .sidebar-bottom>a{justify-content:flex-start}}
 .map-point-stats{margin-top:10px}
+
+.map-point-metric-toggle{display:flex;gap:4px;padding:4px;background:#e9eee5;border-radius:14px;margin-bottom:12px}.map-point-metric-toggle button{flex:1;border:0;background:transparent;border-radius:10px;padding:9px 6px;font-size:11px;color:#657366;cursor:pointer}.map-point-metric-toggle button[aria-pressed=true]{background:#235844;color:#fffef9;box-shadow:0 2px 5px #1d2d271a}.map-point-metric-toggle button:focus-visible{outline:2px solid #235844;outline-offset:2px}

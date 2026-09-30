@@ -10,6 +10,6 @@ export function storeAverageCheck(data:Dataset,filters:Filters,storeId:string){
  const groups=new Map<string,Receipt[]>();
  for(const receipt of current){const day=localDay(receipt.at),group=groups.get(day)||[];group.push(receipt);groups.set(day,group);}
  const before=average(previous),now=average(current);
- return {before,now,previousFrom,previousTo,change:before!==null&&before>0&&now!==null?(now/before-1)*100:null,count:current.length,
-  daily:Array.from({length},(_,i)=>{const date=addDays(filters.from,i);return {date,value:average(groups.get(date)||[])};})};
+ return {before,now,previousFrom,previousTo,change:before!==null&&before>0&&now!==null?(now/before-1)*100:null,count:current.length,previousCount:previous.length,
+  daily:Array.from({length},(_,i)=>{const date=addDays(filters.from,i);return {date,value:average(groups.get(date)||[]),count:(groups.get(date)||[]).length};})};
 }
