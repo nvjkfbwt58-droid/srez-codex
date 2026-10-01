@@ -40,9 +40,9 @@ export function PageEntrance({children}:{children:ReactNode}){
   const reveal=(el:HTMLElement,delay=0)=>{
    animations.get(el)?.cancel();
    const animation=el.animate([
-    {opacity:0,transform:'translate3d(0,18px,0)'},
+    {opacity:0,transform:'translate3d(0,6px,0)'},
     {opacity:1,transform:'translate3d(0,0,0)'},
-   ],{duration:720,delay,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+   ],{duration:300,delay,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
    animations.set(el,animation);
    animation.onfinish=()=>animations.delete(el);
   };
@@ -69,7 +69,7 @@ export function PageEntrance({children}:{children:ReactNode}){
    for(const {el,rect} of positions){
     elements.add(el);observer?.observe(el);
     if(rect.width&&rect.height&&rect.top<window.innerHeight&&rect.bottom>0){
-     entered.add(el);reveal(el,70+Math.min(visible++,6)*55);
+     entered.add(el);reveal(el,Math.min(visible++,4)*30);
     }
    }
   };

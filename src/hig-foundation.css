@@ -1,0 +1,58 @@
+/* Web adaptation of Apple HIG: content first, consistent controls, accessible states. */
+:root{--ui-text:#24352c;--ui-secondary:#566458;--ui-line:#cbd3c7;--ui-focus:#235844;--ui-radius:12px;color-scheme:light}
+.srez-shell{color:var(--ui-text);line-height:1.5}
+.srez-shell :is(button,input,select,textarea){font-family:inherit}
+.srez-shell :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible,dialog :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid var(--ui-focus);outline-offset:3px}
+.srez-shell button:not(:disabled),.srez-shell summary{cursor:pointer}
+.srez-shell button:disabled{cursor:not-allowed;opacity:.5;box-shadow:none}
+.srez-shell :is(button,.button):not(:disabled):active{filter:brightness(.93)}
+.srez-shell .button,dialog .button{min-height:40px;border-radius:var(--ui-radius);font-size:13px;line-height:1.35;padding:10px 15px;gap:8px}
+.srez-shell :is(.button,.tabs button,.map-icon-button,.sidebar nav a,.mobile-navigation a){transition:background-color .16s ease,color .16s ease,box-shadow .16s ease}
+.srez-shell :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea),dialog :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea){min-height:40px;border:1px solid var(--ui-line);border-radius:10px;padding:10px 12px;color:var(--ui-text);background:#fffefb;font-size:14px;line-height:1.4;max-width:100%}
+.srez-shell input::placeholder,.srez-shell textarea::placeholder{color:#687367;opacity:1}
+.srez-shell .field{gap:7px;min-width:0}.srez-shell .field>span{font-size:13px;font-weight:600;line-height:1.4}.srez-shell .field>small{font-size:12px;color:var(--ui-secondary);line-height:1.5}
+.srez-shell :is(input,textarea,select)[aria-invalid=true]{border-color:#b6362b;outline-color:#b6362b}
+.srez-shell :is(.muted,.page-heading>p,.network-home-note,.pm-muted){color:var(--ui-secondary)}
+.srez-shell :is(.panel,.table-container,.assistant-answer){background:#fffefb;backdrop-filter:none;-webkit-backdrop-filter:none}
+.srez-shell .page-heading h1{font-size:clamp(28px,2.5vw,36px);line-height:1.15;letter-spacing:-.7px}.srez-shell .page-heading p{font-size:14px;line-height:1.5;margin-top:8px}
+.srez-shell .panel>h2{font-size:21px;line-height:1.3;letter-spacing:-.35px}.srez-shell .panel>p{line-height:1.6}
+.srez-shell .sidebar nav a{font-size:13px;min-height:44px}.srez-shell .nav-group>h2{font-size:10px;letter-spacing:.8px;color:#596756}
+.srez-shell .tabs{max-width:100%;overflow-x:auto;scrollbar-width:thin;gap:3px;padding:4px;border-radius:13px;background:#e9ede5}
+.srez-shell .tabs button{min-height:36px;padding:8px 13px;font-size:13px;border-radius:10px;white-space:nowrap;flex-shrink:0}.srez-shell .tabs button.active{color:#1d3928;font-weight:600}
+.srez-shell :is(.map-caption,.map-point-stats,.map-average-note,.map-average-period,.map-average-axis,.map-point-heading small,.map-store-area,.map-store-top small,.map-summary-metrics small,.map-directory-heading span,.map-list-select,.map-city>span){font-size:11px!important;color:var(--ui-secondary)}
+.srez-shell .map-metric-switch button,.srez-shell .map-point-metric-toggle button{min-height:36px;font-size:12px}.srez-shell .map-caption{flex-wrap:wrap;right:24px}.srez-shell .map-caption button{min-height:32px;font-size:11px}.srez-shell .map-point-actions>button{min-height:40px;font-size:12px}
+.srez-shell .map-point-card{background:#fffefb!important}.srez-shell .map-point-card>p{font-size:11px;color:var(--ui-secondary)}
+.srez-shell .table-tools{gap:12px}.srez-shell .table-container th button{min-height:36px;font-size:12px}.srez-shell .table-container td{font-size:13px;line-height:1.5}.srez-shell .table-container tr[tabindex]:focus-visible{outline-offset:-3px;background:#edf3e8}
+.srez-shell .table-container footer{gap:12px;flex-wrap:wrap}.srez-shell .table-container footer .button{min-width:40px}
+.srez-shell dialog,dialog{color:var(--ui-text);background:#fffefb;border-radius:24px;padding:24px;max-height:calc(100dvh - 40px);overflow:auto;overscroll-behavior:contain}
+dialog>header{align-items:center;gap:16px;margin-bottom:20px}dialog>header h2{font-size:22px;line-height:1.3}dialog>header>.button{width:40px;min-width:40px;padding:8px;border-radius:50%;flex-shrink:0}
+.srez-shell .modal-actions{gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:16px;border-top:1px solid #e3e7de}
+.srez-shell .assistant-answer>p{font-size:15px;line-height:1.7}.srez-shell .assistant-answer-details>summary{width:40px;height:40px}.srez-shell .assistant-new{min-height:40px;font-size:13px}
+.srez-shell .toast{max-width:calc(100vw - 32px);font-size:14px;line-height:1.5;background:#263d31;color:#fff;border-radius:16px}.srez-shell .toast>button{min-width:40px;min-height:40px;color:inherit}
+.skip-content{position:fixed;left:16px;top:12px;z-index:3000;padding:12px 18px;background:#fffefb;color:#235844;border:2px solid #235844;border-radius:12px;transform:translateY(-160%)}.skip-content:focus{transform:none}
+@media(max-width:768px){
+ .srez-shell .page-heading h1{font-size:28px}.srez-shell .page-heading p{font-size:14px}.srez-shell .page-actions{gap:8px}
+ .srez-shell :is(button,.button),dialog button{min-height:44px}
+ .srez-shell :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea),dialog :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea){font-size:16px;min-height:44px}
+ .srez-shell .tabs button{min-height:44px;font-size:13px}.srez-shell .page-actions>.button{font-size:13px}.srez-shell .mobile-navigation a,.srez-shell .mobile-navigation button{font-size:11px}
+ .srez-shell .map-controls .map-icon-button{width:44px;height:44px}.srez-shell .map-topbar{right:74px}.srez-shell .map-caption{font-size:11px;gap:4px;bottom:8px}.srez-shell .map-caption button{font-size:11px;min-height:36px}.srez-shell .map-north{display:none}.srez-shell .map-point-card{bottom:64px!important;max-height:calc(100% - 122px)!important}
+ .srez-shell .map-caption>span:not(.map-north){display:none}
+ .srez-shell dialog,dialog{width:calc(100% - 24px);max-width:calc(100% - 24px);padding:20px;max-height:calc(100dvh - 32px);border-radius:24px}
+ .srez-shell .assistant-answer{padding:20px}.srez-shell .assistant-answer-details>summary{width:44px;height:44px}
+ .srez-shell .toast{bottom:calc(88px + env(safe-area-inset-bottom));left:16px;right:16px;width:auto;transform:none}
+}
+@media(prefers-reduced-motion:reduce){.srez-shell *,.srez-shell *::before,.srez-shell *::after,dialog{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-transparency:reduce){.srez-shell :is(.sidebar,.mobile-navigation,.page-actions,.map-topbar>*,.map-controls,.assistant-glass){background:#f8faf3!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
+@media(prefers-contrast:more){:root{--ui-secondary:#334333;--ui-line:#637060}.srez-shell :is(.sidebar,.panel,.map-point-card,.map-controls,.mobile-navigation,.page-actions){background:#fffefb!important;border-color:#637060!important}.srez-shell :is(.muted,.field>small,.map-average-note,.map-average-period){color:#334333!important}}
+@media(forced-colors:active){.srez-shell :is(button,.button,input,select,textarea){border:1px solid ButtonText}.srez-shell .tabs button.active,.srez-shell [aria-pressed=true]{outline:2px solid Highlight}.srez-shell :focus-visible{outline:3px solid Highlight}}
+.srez-shell button{min-height:32px}
+.srez-shell .search-input input,.srez-shell .map-search input{border:0;background:transparent;box-shadow:none;padding-left:0;padding-right:0}
+.srez-shell :is(.brand-assets small,.brand-board small,.style-choice-caption small,.pm-eyebrow,.network-home-note){font-size:11px;color:#566458}
+.srez-shell .brand-assets .text-button{min-height:36px;font-size:12px}
+@media(max-width:768px){.srez-shell button{min-height:44px}.srez-shell .map-caption button{min-height:36px}.srez-shell .brand-assets .text-button{min-height:44px}.srez-shell .map-point-card{width:300px!important}.srez-shell .store-pin{min-height:44px}}
+/* Dense editor controls still need a finger-sized target; artwork keeps its scale. */
+@media(max-width:768px),(pointer:coarse){
+ .srez-shell button:not(.coupon-use){min-height:44px!important}
+ .srez-shell :is(.plain-icon,.map-icon-button){min-width:44px!important}
+ .srez-shell .studio-heading .button{font-size:13px}
+}
