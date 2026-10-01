@@ -22,6 +22,7 @@ import './coupon-workflow.css';
 import './srez-shell.css';
 import './liquid-glass.css';
 import './retail-continuity.css';
+import './icon-system.css';
 async function mount(){
  if(isPages)await (await import('./pagesStore')).initializePages();
  const Router=isPages?HashRouter:BrowserRouter;

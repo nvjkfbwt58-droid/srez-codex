@@ -1,0 +1,11 @@
+/* Optical consistency for UI symbols; brand artwork and charts are intentionally separate. */
+.srez-shell .lucide,.srez-shell .srez-nav-icon{stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:middle}
+.srez-shell .sidebar nav a>.srez-nav-icon{width:21px;height:21px;overflow:visible}
+.srez-shell .sidebar nav a.active>.srez-nav-icon{stroke-width:2}
+.srez-shell .mobile-navigation .srez-nav-icon{width:23px;height:23px}
+.srez-shell .mobile-navigation .active .srez-nav-icon{stroke-width:2}
+.srez-shell .sidebar-bottom .lucide{width:20px;height:20px}
+.srez-shell .button .lucide,.srez-shell .button .srez-nav-icon{width:18px;height:18px}
+.srez-shell .map-controls .map-icon-button{width:36px;height:40px}
+.srez-shell .map-icon-button:focus-visible,.srez-shell .sidebar nav a:focus-visible{outline:2px solid #235844;outline-offset:3px}
+@media(pointer:coarse){.srez-shell .map-controls .map-icon-button{width:44px;height:44px}.srez-shell .map-point-heading>.map-icon-button{width:44px;height:44px}}
